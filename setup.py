@@ -11,7 +11,7 @@ setup(
 	url='https://github.com/ecolell/factopy',
 	license='GNU AGPL v3, see LICENCE.txt',
 	description='This is a framework that provides certain abstract classes for distributed processing on a cluster.',
-	long_description=open('README.txt').read(),
+	long_description=open('README.md').read(),
 	zip_safe=False,
 	include_package_data=True,
 )
