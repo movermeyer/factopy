@@ -25,5 +25,5 @@ setup(
 		'defusedxml == 0.4.1',
 		'lxml == 2.3.6',
 		'django-tastypie == 0.11.0'
-		]
+		],
 )

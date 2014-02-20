@@ -1,4 +1,4 @@
-include AUTHORS README.md LICENCE
+include AUTHORS README.md LICENSE
 recursive-include factopy *.py *.html *.js
 include docs/Makefile
 recursive-include docs/source *
