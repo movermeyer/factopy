@@ -1,4 +1,4 @@
-include AUTHORS CHANGES README INSTALL LICENCE
+include AUTHORS CHANGES README.md INSTALL LICENCE
 recursive-include factopy *.py *.html *.js
 include docs/Makefile
 recursive-include docs/source *
