@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from distutils.core import setup
-from setuptools import find_packages
+try:
+	from setuptools import setup
+	from setuptools import find_packages
+except ImportError:
+	from distutils.core import setup
 
 setup(
 	name='factopy',
@@ -14,4 +17,13 @@ setup(
 	long_description=open('README.md').read(),
 	zip_safe=False,
 	include_package_data=True,
+	install_requires = [
+		'Django == 1.5',
+		'numpy == 1.8.0',
+		'pytz == 2012j',
+		'django-polymorphic == 0.5.3',
+		'defusedxml == 0.4.1',
+		'lxml == 2.3.6',
+		'django-tastypie == 0.11.0'
+		]
 )
