@@ -1,0 +1,140 @@
+- model: factopy.tagmanager
+  pk: 1
+  fields:
+    tag_string: ""
+
+- model: factopy.tagmanager
+  pk: 2
+  fields:
+    tag_string: ""
+
+- model: factopy.stream
+  pk: 1
+  fields:
+    tags: 1
+    created: "2013-01-01T00:00+00:00"
+    modified: "2013-01-01T00:00+00:00"
+
+- model: factopy.stream
+  pk: 2
+  fields:
+    tags: 2
+    created: "2013-01-01T00:00+00:00"
+    modified: "2013-01-01T00:00+00:00"
+
+- model: factopy.process
+  pk: 1
+  fields:
+    polymorphic_ctype: 43
+    name: 'Filter nights and compact'
+    description: 'Filter all images with solar elevation < 10 degrees.'
+
+- model: factopy.complexprocess
+  pk: 1
+  fields: {}
+
+- model: factopy.program
+  pk: 1
+  fields:
+    stream: 1
+
+- model: factopy.process
+  pk: 3
+  fields:
+    polymorphic_ctype: 38
+    name: 'G13C1'
+    description: 'Select GOES 13 Channel 1 (visible channel).'
+
+- model: factopy.filter
+  pk: 3
+  fields: {}
+
+- model: factopy.process
+  pk: 4
+  fields:
+    polymorphic_ctype: 36
+    name: 'year.Mmonth'
+    description: 'Classify the files by year and by month.'
+
+- model: factopy.collect
+  pk: 4
+  fields: {}
+
+- model: factopy.process
+  pk: 5
+  fields:
+    polymorphic_ctype: 37
+    name: 'Channel classify'
+    description: 'Aggregate images by channel number'
+
+- model: factopy.collect
+  pk: 5
+  fields: {}
+
+- model: factopy.process
+  pk: 6
+  fields:
+    polymorphic_ctype: 40
+    name: 'Filter night''s images'
+    description: 'Only pass the images with a solar elevation >= 10 degrees.'
+
+- model: factopy.filter
+  pk: 6
+  fields: {}
+
+- model: factopy.process
+  pk: 7
+  fields:
+    polymorphic_ctype: 36
+    name: 'year'
+    description: 'Classify the files by year.'
+
+- model: factopy.collect
+  pk: 7
+  fields: {}
+
+- model: factopy.process
+  pk: 8
+  fields:
+    polymorphic_ctype: 36
+    name: 'year.Wweek'
+    description: 'Classify the files by year and by week.'
+
+- model: factopy.collect
+  pk: 8
+  fields: {}
+
+- model: factopy.processorder
+  pk: 1
+  fields:
+    position: 1
+    process: 3
+    complex_process: 1
+
+- model: factopy.processorder
+  pk: 2
+  fields:
+    position: 2
+    process: 4
+    complex_process: 1
+
+- model: factopy.processorder
+  pk: 3
+  fields:
+    position: 3
+    process: 5
+    complex_process: 1
+
+- model: factopy.processorder
+  pk: 4
+  fields:
+    position: 4
+    process: 6
+    complex_process: 1
+
+- model: factopy.processorder
+  pk: 5
+  fields:
+    position: 5
+    process: 2
+    complex_process: 1
