@@ -5,6 +5,9 @@ try:
 except ImportError:
 	from distutils.core import setup
 
+from pip.req import parse_requirements
+reqs = [str(ir.req) for ir in parse_requirements('requirements.txt')]
+
 setup(
 	name='factopy',
 	version='0.0.1',
@@ -17,13 +20,5 @@ setup(
 	long_description=open('README.md').read(),
 	zip_safe=False,
 	include_package_data=True,
-	install_requires = [
-		'Django == 1.5',
-		'numpy == 1.8.0',
-		'pytz == 2012j',
-		'django-polymorphic == 0.5.3',
-		'defusedxml == 0.4.1',
-		'lxml == 2.3.6',
-		'django-tastypie == 0.11.0'
-		],
+	install_requires = reqs,
 )
