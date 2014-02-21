@@ -1,18 +1,18 @@
 from django.conf.urls import patterns, include, url
-from tastypie.api import Api
-from plumbing.api import StreamResource, MaterialResource, MaterialStatusResource, ProcessResource
+from django.contrib import admin
+import plumbing
 
+# Api provide an easy way of automatically determining the URL conf.
 
-api_v1 = Api(api_name='v1')
-api_v1.register(StreamResource())
-api_v1.register(MaterialResource())
-api_v1.register(MaterialStatusResource())
-api_v1.register(ProcessResource())
+admin.autodiscover()
 
 urlpatterns = patterns('',
-	url(r'^api/', include(api_v1.urls)),
-	url(r'^program/$', 'plumbing.views.index'),
-	url(r'^program/execute/(?P<program_id>\d+)/$', 'plumbing.views.execute'),
-	url(r'^program/status$', 'plumbing.views.status'),
-	url(r'^program/update$', 'plumbing.views.update'),
+	# Examples:
+	url(r'^plumbing/', include('plumbing.urls')),
+
+	# Uncomment the admin/doc line below to enable admin documentation:
+	url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+
+	# Uncomment the next line to enable the admin:
+	url(r'^admin/', include(admin.site.urls)),
 )
