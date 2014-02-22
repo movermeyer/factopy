@@ -1,5 +1,5 @@
 OS:=$(shell uname -s)
-download = [ ! -f $(1) ] && echo "[ downloading  ] $(1)" && curl --compressed --location -O $(2)/$(1) || echo "[ downloaded   ] $(1)"
+download = [ ! -f $(1) ] && echo "[ downloading  ] $(1)" && curl --anyauth --compressed --location -O $(2)/$(1) || echo "[ downloaded   ] $(1)"
 unpack = [ ! -d $(2) ] && echo "[ unpacking    ] $(1)" && tar xzf $(1) || echo "[ unpacked     ] $(1)"
 
 define get
@@ -94,7 +94,7 @@ unattended:
 	@ (sudo ls 2>&1) >> tracking.log
 
 Python$(PYLARGESUFIX_VER):
-	$(call get,Python$(PYLARGESUFIX_VER),Python$(PYLARGESUFIX_VER).tgz,http://www.python.org/ftp/python/$(PYLARGEVERSION))
+	$(call get,Python$(PYLARGESUFIX_VER),Python$(PYLARGESUFIX_VER).tgz,http://legacy.python.org/ftp/python/$(PYLARGEVERSION))
 	$(call compile,Python$(PYLARGESUFIX_VER),$(PYTHONLIBS),--prefix=$(PYPREFIX_PATH) --with-threads --enable-shared)
 
 $(PYTHONPATH): Python$(PYLARGESUFIX_VER)
@@ -196,4 +196,4 @@ test-coverage: test-coverage-travis-ci test-coveralls
 
 clean: pg-stop
 	@ echo "[ cleaning     ] remove deployment generated files that doesn't exists in the git repository"
-	@ sudo rm -rf sqlite* postgresql* hdf5* netcdf-4* python-aspects* virtualenv* bin/ lib/ lib64 include/ build/ share Python-* .Python ez_setup.py get-pip.py tracking.log factopy.sqlite3 aspects.py subversion
+	@ sudo rm -rf sqlite* postgresql* hdf5* netcdf-4* python-aspects* virtualenv* bin/ lib/ lib64 include/ build/ share Python-* .Python ez_setup.py setuptools-*.tar.gz get-pip.py tracking.log factopy.sqlite3 aspects.py subversion
