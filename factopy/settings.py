@@ -70,7 +70,7 @@ STATICFILES_FINDERS = (
 
 # Make this unique, and don't share it with anybody.
 with open('factopy/secret_key.txt') as f:
-    SECRET_KEY = f.read().strip()
+	SECRET_KEY = f.read().strip()
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
