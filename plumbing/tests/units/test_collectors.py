@@ -12,16 +12,14 @@ class TestCollectors(TestCase):
 	def setUp(self):
 		self.collect = Collect.objects.create(name='abstract one')
 		self.other_collect = Collect.objects.create(name='abstract two')
-		self.other_collect.get_key = lambda material_status: "even" if (material_status.material.datetime()).month % 2 == 0 else "uneven"
-		self.stream = Stream(root_path="/var/service/data/GVAR_IMG/argentina/")
+		self.other_collect.get_key = lambda material_status: "even" if material_status.material.id % 2 == 0 else "uneven"
+		self.stream = Stream()
 		self.stream.save()
-		months = range(1,13)
-		random.shuffle(months)
-		self.files = [ File.objects.get_or_create(localname="%s2013/goes13.2013.M%s.BAND.1.nc" % (self.stream.root_path, str(i).zfill(2)))[0] for i in months]
-		for i in range(len(self.files)):
-			self.files[i].save()
-			fs = MaterialStatus.objects.get_or_create(material=self.files[i],stream=self.stream,processed=(i%2==0))[0]
-			fs.save()
+		self.materials = [ Material() for i in range(1,13) ]
+		for i in range(len(self.materials)):
+			self.materials[i].save()
+			ms = MaterialStatus.objects.get_or_create(material=self.materials[i],stream=self.stream,processed=(i%2==0))[0]
+			ms.save()
 
 	def test_mark_with_tags(self):
 		# check if the mark_with_tags method in the Collect class don't
@@ -63,9 +61,9 @@ class TestCollectors(TestCase):
 			self.assertTrue(streams[key].empty())
 
 	def test_do(self):
-		# check if all the files statuses of the stream are unprocessed.
+		# check if all the material statuses of the stream are unprocessed.
 		self.assertTrue(self.stream.materials.filter(processed=True).count(), 0)
-		# check if collect files into two differents streams: even and uneven (with the fake
+		# check if collect materials into two differents streams: even and uneven (with the fake
 		# get_key).
 		other = {"even": "uneven", "uneven": "even"}
 		result = self.other_collect.do(self.stream)

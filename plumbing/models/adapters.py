@@ -1,17 +1,21 @@
 from django.db import models
 from core import Process, Stream
+import threading
 
 
-class Adapter(Process):
+class Adapt(Process):
 	class Meta(object):
 		app_label = 'plumbing'
 	stream = models.ForeignKey(Stream, null=True, default=None)
+
+	def do(self, stream):
+		return stream
 
 	def update(self):
 		raise Exception("Subclass responsability")
 
 
-class Importer(Adapter):
+class Importer(Adapt):
 	class Meta(object):
 			app_label = 'plumbing'
 	frequency = models.IntegerField(default=15*60) # It is expressed in seconds

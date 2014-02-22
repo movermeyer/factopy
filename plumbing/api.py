@@ -2,7 +2,7 @@ from plumbing.models import Stream, Material, MaterialStatus, Process
 from tastypie import fields
 from tastypie.authentication import SessionAuthentication
 from tastypie.resources import ModelResource
-from libs.tastypie_polymorphic import PolymorphicModelResource
+from tastypie_polymorphic import PolymorphicModelResource
 
 
 class MaterialResource(PolymorphicModelResource):

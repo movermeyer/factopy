@@ -1,6 +1,6 @@
 from django.contrib import admin
 from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModelAdmin, PolymorphicChildModelFilter
-from plumbing.models import TagManager, Stream, MaterialStatus, Material, Process, ProcessOrder, ComplexProcess, Program, File, CollectTimed, CollectChannel, FilterTimed, FilterChannel, FilterSolarElevation, AppendCountToRadiationCoefficient, Compact, SyncImporter
+from plumbing.models import TagManager, Stream, MaterialStatus, Material, Process, ProcessOrder, ComplexProcess, Filter, Collect, Adapt
 from django.forms import ModelForm
 
 
@@ -9,7 +9,7 @@ class TagManagerAdmin(admin.ModelAdmin):
 
 
 class StreamAdmin(admin.ModelAdmin):
-	list_display = ['root_path', 'created', 'modified']
+	list_display = ['created', 'modified']
 
 
 class MaterialChildAdmin(PolymorphicChildModelAdmin):
@@ -19,9 +19,7 @@ class MaterialChildAdmin(PolymorphicChildModelAdmin):
 class MaterialAdmin(PolymorphicParentModelAdmin):
 	base_model = Material
 	list_filter = (PolymorphicChildModelFilter,)
-	child_models = (
-		(File, MaterialChildAdmin),
-	)
+	child_models = []
 
 
 class MaterialStatusAdmin(admin.ModelAdmin):
@@ -56,16 +54,10 @@ class ProcessAdmin(PolymorphicParentModelAdmin):
 	base_model = Process
 	list_filter = (PolymorphicChildModelFilter,)
 	child_models = (
-		(CollectTimed, ProcessChildAdmin),
-		(CollectChannel, ProcessChildAdmin),
-		(FilterTimed, ProcessChildAdmin),
-		(FilterChannel, ProcessChildAdmin),
-		(FilterSolarElevation, ProcessChildAdmin),
-		(AppendCountToRadiationCoefficient, ProcessChildAdmin),
-		(Compact, ProcessChildAdmin),
 		(ComplexProcess, ComplexProcessChildAdmin),
-		(Program, ComplexProcessChildAdmin),
-		(SyncImporter, ProcessChildAdmin),
+		(Filter, ProcessChildAdmin),
+		(Collect, ProcessChildAdmin),
+		(Adapt, ProcessChildAdmin),
 	)
 
 

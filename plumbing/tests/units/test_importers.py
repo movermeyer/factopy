@@ -11,7 +11,7 @@ class TestImporters(TestCase):
 	fixtures = [ 'initial_data.yaml', '*']
 
 	def setUp(self):
-		self.stream = Stream(root_path="/var/service/data/GVAR_IMG/argentina/")
+		self.stream = Stream()
 		self.stream.save()
 		self.importer = Importer.objects.get_or_create(name='abstract one', stream=self.stream)[0]
 

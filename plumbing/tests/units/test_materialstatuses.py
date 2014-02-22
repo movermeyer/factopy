@@ -9,11 +9,11 @@ class TestMaterialStatuses(TestCase):
 	fixtures = [ 'initial_data.yaml', '*']
 
 	def setUp(self):
-		self.stream = Stream(root_path="/var/service/data/GVAR_IMG/argentina/")
+		self.stream = Stream()
 		self.stream.save()
 		self.stream.tags.append("to_be_cloned")
 		self.stream.tags.append("to_be_tested")
-		self.second_stream = Stream(root_path="/var/service/data/GVAR_IMG/argentina/")
+		self.second_stream = Stream()
 		self.second_stream.save()
 		self.material = Material()
 		self.material.save()

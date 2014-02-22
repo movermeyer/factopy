@@ -14,7 +14,7 @@ class TestFilters(TestCase):
 		self.filter = Filter.objects.create(name='abstract one')
 		self.other_filter = Filter.objects.create(name='abstract two')
 		self.other_filter.should_be_cloned = lambda material_status: True
-		self.stream = Stream(root_path="/var/service/data/GVAR_IMG/argentina/")
+		self.stream = Stream()
 		self.stream.save()
 		self.materials = [ Material() for i in range(5) ]
 		for i in range(len(self.materials)):

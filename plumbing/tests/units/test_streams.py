@@ -12,22 +12,20 @@ class TestStreams(TestCase):
 
 	def setUp(self):
 		self.begin = datetime.utcnow().replace(tzinfo=pytz.UTC)
-		self.stream = Stream(root_path="/var/service/data/GVAR_IMG/argentina/")
+		self.stream = Stream()
 		self.stream.save()
 		self.end = datetime.utcnow().replace(tzinfo=pytz.UTC)
-		months = range(1,13)
-		random.shuffle(months)
-		self.files = [ File.objects.get_or_create(localname="%s2013/goes13.2013.M%s.BAND.1.nc" % (self.stream.root_path, str(i).zfill(2)))[0] for i in months]
-		for i in range(len(self.files)):
-			self.files[i].save()
-			fs = MaterialStatus.objects.get_or_create(material=self.files[i],stream=self.stream,processed=(i%2==0))[0]
-			fs.save()
+		self.materials = [ Material() for i in range(1,13)]
+		for i in range(len(self.materials)):
+			self.materials[i].save()
+			ms = MaterialStatus.objects.get_or_create(material=self.materials[i],stream=self.stream,processed=(i%2==0))[0]
+			ms.save()
 
 	def test_serialization(self):
-		# check if the __str__ method is defined to return the object pk, root_path and tags parameter.
-		result = u'%s %s %s' % (unicode(self.stream.pk), self.stream.root_path, unicode(self.stream.tags))
+		# check if the __str__ method is defined to return the object pk and tags parameter.
+		result = u'%s %s' % (unicode(self.stream.pk), unicode(self.stream.tags))
 		self.assertEquals(str(self.stream), str(result))
-		# check if the __unicode__ method is defined to return the object pk, root_path and tags parameter.
+		# check if the __unicode__ method is defined to return the object pk and tags parameter.
 		self.assertEquals(unicode(self.stream), result)
 
 	def test_save(self):
@@ -39,19 +37,12 @@ class TestStreams(TestCase):
 		self.stream.save()
 		self.assertTrue(self.stream.modified > self.stream.created)
 
-	def test_get_stream_from_filename(self):
-		# check if can extract the stream's root_path from the filename.
-		filename = self.stream.root_path + "2013/goes13.2013.M12.BAND_01.nc"
-		self.assertEquals(Stream.get_stream_from_filename(filename), self.stream.root_path)
-
 	def test_clone(self):
 		# check if the clone method create a new stream.
 		self.stream.tags.append("to_be_cloned")
 		self.stream.tags.append("to_be_tested")
 		clone = self.stream.clone()
 		self.assertNotEquals(clone, self.stream)
-		# check if the cloned stream has the same root_path.
-		self.assertEquals(clone.root_path, self.stream.root_path)
 		# check if the cloned stream has all the tags
 		self.assertNotEquals(clone.tags, self.stream.tags)
 		self.assertEquals(clone.tags.list(), self.stream.tags.list())

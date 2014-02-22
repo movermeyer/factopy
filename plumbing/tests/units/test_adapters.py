@@ -10,9 +10,9 @@ class TestAdapters(TestCase):
 	fixtures = [ 'initial_data.yaml', '*']
 
 	def setUp(self):
-		self.stream = Stream(root_path="/var/service/data/GVAR_IMG/argentina/")
+		self.stream = Stream()
 		self.stream.save()
-		self.adapter = Adapter.objects.get_or_create(name='abstract one', stream=self.stream)[0]
+		self.adapter = Adapt.objects.get_or_create(name='abstract one', stream=self.stream)[0]
 
 	def test_update(self):
 		# check if the update method raise a "Subclass responsability" exception because the subclass

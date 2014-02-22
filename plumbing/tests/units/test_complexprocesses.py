@@ -11,7 +11,7 @@ class TestComplexProcesses(TestCase):
 
 	def setUp(self):
 		self.complex_process = ComplexProcess.objects.get_or_create(name='Filter nights and compact')[0]
-		self.stream = Stream(root_path="/var/service/data/GVAR_IMG/argentina/")
+		self.stream = Stream()
 		self.stream.save()
 		self.material = Material()
 		self.material.save()
@@ -19,7 +19,7 @@ class TestComplexProcesses(TestCase):
 		self.material_status.save()
 
 	def test_encapsulate_in_array(self):
-		# check if the __str__ method is defined to return the object root_path parameter.
+		# check if the encapsulate_in_array method is defined to return always the stream/s inside an array.
 		self.assertEquals(self.complex_process.encapsulate_in_array(self.stream), [self.stream])
 		self.assertEquals(self.complex_process.encapsulate_in_array([self.stream]), [self.stream])
 
@@ -41,7 +41,10 @@ class TestComplexProcesses(TestCase):
 				input_stream = args[1]
 				self.called_subprocesses.append(args[0])
 				# patch the results of any process to go through all the subprocesses.
-				tmp_results = yield aspects.proceed(*args)
+				try:
+					tmp_results = yield aspects.proceed(*args)
+				except Exception:
+					tmp_results = input_stream
 				results = self.complex_process.encapsulate_in_array(tmp_results)
 				for r in results:
 					result_materials = [ ms.material for ms in r.materials.all() ]
