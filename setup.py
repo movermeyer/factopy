@@ -10,13 +10,13 @@ reqs = [str(ir.req) for ir in parse_requirements('requirements.txt')]
 
 setup(
 	name='factopy',
-	version='0.0.1',
+	version='0.0.2',
 	author=u'Eloy Adonis Colell',
 	author_email='eloy.colell@gmail.com',
 	packages=find_packages(),
 	url='https://github.com/ecolell/factopy',
 	license='GNU AGPL v3, see LICENCE.txt',
-	description='This is a framework that provides certain abstract classes for distributed processing on a cluster.',
+	description='A python framework that provides abstract classes for a high performance computing cluster based in a pipe and filter architecture',
 	long_description=open('README.md').read(),
 	zip_safe=False,
 	include_package_data=True,
