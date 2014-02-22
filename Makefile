@@ -1,5 +1,5 @@
 OS:=$(shell uname -s)
-download = [ ! -f $(1) ] && echo "[ downloading  ] $(1)" && curl --anyauth --compressed --location -O $(2)/$(1) || echo "[ downloaded   ] $(1)"
+download = [ ! -f $(1) ] && echo "[ downloading  ] $(1)" && curl --compressed --location -O $(2)/$(1) || echo "[ downloaded   ] $(1)"
 unpack = [ ! -d $(2) ] && echo "[ unpacking    ] $(1)" && tar xzf $(1) || echo "[ unpacked     ] $(1)"
 
 define get
