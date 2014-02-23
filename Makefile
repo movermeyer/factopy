@@ -153,7 +153,7 @@ bin/activate: requirements.txt
 	@ echo "[ installing   ] $(PIP) inside $(VIRTUALENV)"
 	@ ($(SOURCE_ACTIVATE) $(EASYINSTALL) pip 2>&1) >> tracking.log
 	@ echo "[ installing   ] $(PIP) requirements"
-	@ (PATH="$(POSTGRES_PATH):$(PATH)"; $(SOURCE_ACTIVATE) $(PIP) install --default-timeout=100 -r requirements.txt 2>&1) >> tracking.log
+	@ PATH="$(POSTGRES_PATH):$(PATH)"; $(SOURCE_ACTIVATE) $(PIP) install --default-timeout=100 -r requirements.txt 2>&1 | grep Downloading
 	@ touch bin/activate
 
 postgres-requirements:
