@@ -1,3 +1,4 @@
+pyandoc==0.0.1
 Django==1.5
 PyYAML==3.10
 numpy==1.8.0

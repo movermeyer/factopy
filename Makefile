@@ -194,6 +194,10 @@ test-coveralls:
 
 test-coverage: test-coverage-travis-ci test-coveralls
 
+pypi-upload: test
+	@ echo "[ uploading    ] package to pypi servers"
+	@ ($(SOURCE_ACTIVATE) $(PYTHON) setup.py sdist upload 2>&1) >> tracking.log
+
 clean: pg-stop
 	@ echo "[ cleaning     ] remove deployment generated files that doesn't exists in the git repository"
 	@ sudo rm -rf sqlite* postgresql* hdf5* netcdf-4* python-aspects* virtualenv* bin/ lib/ lib64 include/ build/ share Python-* .Python ez_setup.py setuptools-*.tar.gz get-pip.py tracking.log factopy.sqlite3 aspects.py subversion
