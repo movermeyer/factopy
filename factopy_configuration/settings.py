@@ -9,7 +9,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-from factopy.database import DATABASES
+from factopy_configuration.database import DATABASES
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -69,7 +69,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-with open('factopy/secret_key.txt') as f:
+with open('factopy_configuration/secret_key.txt') as f:
 	SECRET_KEY = f.read().strip()
 
 # List of callables that know how to import templates from various sources.
@@ -90,10 +90,10 @@ MIDDLEWARE_CLASSES = (
 	# 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'factopy.urls'
+ROOT_URLCONF = 'factopy_configuration.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'factopy.wsgi.application'
+WSGI_APPLICATION = 'factopy_configuration.wsgi.application'
 
 TEMPLATE_DIRS = (
 	# Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

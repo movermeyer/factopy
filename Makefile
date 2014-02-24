@@ -106,7 +106,7 @@ $(LIBSQLITE3):
 
 sqlite3: $(LIBSQLITE3)
 	@ echo "[ setting up   ] sqlite3 database"
-	@ cd factopy && cp -f database.sqlite3.py database.py
+	@ cd factopy_configuration && cp -f database.sqlite3.py database.py
 
 $(LIBPOSTGRES):
 	$(call get,postgresql-9.2.4,postgresql-9.2.4.tar.gz,ftp://ftp.postgresql.org/pub/source/v9.2.4)
@@ -135,7 +135,7 @@ postgres: $(LIBPOSTGRES) pg-start
 	@ (sudo -u postgres $(POSTGRES_PATH)/dropuser --if-exists $(shell whoami) 2>&1) >> tracking.log
 	@ (sudo -u postgres $(POSTGRES_PATH)/createuser --superuser --createdb $(shell whoami) 2>&1) >> tracking.log
 	@ echo "[ setting up   ] postgres database"
-	@ cd factopy && cp -f database.postgres.py database.py
+	@ cd factopy_configuration && cp -f database.postgres.py database.py
 
 aspects.py:
 	$(call get,python-aspects-1.3,python-aspects-1.3.tar.gz,http://www.cs.tut.fi/~ask/aspects)
