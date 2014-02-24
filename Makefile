@@ -184,10 +184,10 @@ runbackend:
 	$(SOURCE_ACTIVATE) $(PYTHON) manage.py runbackend 4
 
 test:
-	@ $(SOURCE_ACTIVATE) $(PYTHON) manage.py test plumbing
+	@ $(SOURCE_ACTIVATE) $(PYTHON) manage.py test factopy
 
 test-coverage-travis-ci:
-	@ $(SOURCE_ACTIVATE) coverage run --source='plumbing/models/' manage.py test plumbing
+	@ $(SOURCE_ACTIVATE) coverage run --source='factopy/models/' manage.py test factopy
 
 test-coveralls:
 	@ $(SOURCE_ACTIVATE) coveralls
