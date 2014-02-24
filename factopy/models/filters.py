@@ -3,7 +3,7 @@ from core import Process
 
 class Filter(Process):
 	class Meta(object):
-		app_label = 'plumbing'
+		app_label = 'factopy'
 
 	def should_be_cloned(self, material_status):
 		return False

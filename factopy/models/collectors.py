@@ -3,7 +3,7 @@ from core import Process
 
 class Collect(Process):
 	class Meta(object):
-		app_label = 'plumbing'
+		app_label = 'factopy'
 
 	def get_key(self, material_status):
 		raise AttributeError("'Collect' object has no attribute 'get_key'")

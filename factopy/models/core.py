@@ -6,7 +6,7 @@ import pytz
 
 class TagManager(models.Model):
 	class Meta(object):
-		app_label = 'plumbing'
+		app_label = 'factopy'
 	tag_string = models.TextField(db_index=True, default="")
 
 	@classmethod
@@ -50,7 +50,7 @@ class TagManager(models.Model):
 
 class Stream(models.Model,object):
 	class Meta(object):
-		app_label = 'plumbing'
+		app_label = 'factopy'
 	tags = models.ForeignKey(TagManager, related_name='stream', default=TagManager.empty)
 	created = models.DateTimeField(editable=False,default=datetime.utcnow().replace(tzinfo=pytz.UTC))
 	modified = models.DateTimeField(default=datetime.utcnow().replace(tzinfo=pytz.UTC))
@@ -87,7 +87,7 @@ class Stream(models.Model,object):
 
 class Material(PolymorphicModel, object):
 	class Meta(object):
-		app_label = 'plumbing'
+		app_label = 'factopy'
 	objects = PolymorphicManager()
 	created = models.DateTimeField(auto_now_add=True)
 	modified = models.DateTimeField(auto_now=True)
@@ -101,7 +101,7 @@ class Material(PolymorphicModel, object):
 
 class MaterialStatus(models.Model):
 	class Meta(object):
-		app_label = 'plumbing'
+		app_label = 'factopy'
 		verbose_name_plural = 'Material statuses'
 		unique_together = ("material", "stream")
 	material = models.ForeignKey('Material', related_name='stream')
@@ -122,7 +122,7 @@ class MaterialStatus(models.Model):
 
 class Process(PolymorphicModel,object):
 	class Meta(object):
-		app_label = 'plumbing'
+		app_label = 'factopy'
 		verbose_name_plural = 'Processes'
 	objects = PolymorphicManager()
 	name = models.TextField(db_index=True)
@@ -140,7 +140,7 @@ class Process(PolymorphicModel,object):
 
 class ComplexProcess(Process):
 	class Meta(object):
-		app_label = 'plumbing'
+		app_label = 'factopy'
 	processes = models.ManyToManyField('Process', through='ProcessOrder', related_name='complex_process')
 
 	def encapsulate_in_array(self, streams):
@@ -167,7 +167,7 @@ class ComplexProcess(Process):
 
 class ProcessOrder(models.Model):
 	class Meta(object):
-		app_label = 'plumbing'
+		app_label = 'factopy'
 	position = models.IntegerField()
 	process = models.ForeignKey('Process', related_name='used_by')
 	complex_process = models.ForeignKey(ComplexProcess)

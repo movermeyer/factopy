@@ -1,145 +1,145 @@
-- model: plumbing.tagmanager
+- model: factopy.tagmanager
   pk: 1
   fields:
     tag_string: ""
 
-- model: plumbing.tagmanager
+- model: factopy.tagmanager
   pk: 2
   fields:
     tag_string: ""
 
-- model: plumbing.stream
+- model: factopy.stream
   pk: 1
   fields:
     tags: 1
     created: "2013-01-01T00:00+00:00"
     modified: "2013-01-01T00:00+00:00"
 
-- model: plumbing.stream
+- model: factopy.stream
   pk: 2
   fields:
     tags: 2
     created: "2013-01-01T00:00+00:00"
     modified: "2013-01-01T00:00+00:00"
 
-- model: plumbing.process
+- model: factopy.process
   pk: 1
   fields:
     polymorphic_ctype: 14
     name: 'Filter nights and compact'
     description: 'Filter all images with solar elevation < 10 degrees.'
 
-- model: plumbing.complexprocess
+- model: factopy.complexprocess
   pk: 1
   fields: {}
 
-- model: plumbing.process
+- model: factopy.process
   pk: 2
   fields:
     polymorphic_ctype: 16
     name: 'Save'
     description: 'Compile all in a NetCDF4 file.'
 
-- model: plumbing.adapt
+- model: factopy.adapt
   pk: 2
   fields:
     stream: 2
 
-- model: plumbing.process
+- model: factopy.process
   pk: 3
   fields:
     polymorphic_ctype: 19
     name: 'G13C1'
     description: 'Select GOES 13 Channel 1 (visible channel).'
 
-- model: plumbing.filter
+- model: factopy.filter
   pk: 3
   fields: {}
 
-- model: plumbing.process
+- model: factopy.process
   pk: 4
   fields:
     polymorphic_ctype: 18
     name: 'year.Mmonth'
     description: 'Classify the files by year and by month.'
 
-- model: plumbing.collect
+- model: factopy.collect
   pk: 4
   fields: {}
 
-- model: plumbing.process
+- model: factopy.process
   pk: 5
   fields:
     polymorphic_ctype: 18
     name: 'Channel classify'
     description: 'Aggregate images by channel number'
 
-- model: plumbing.collect
+- model: factopy.collect
   pk: 5
   fields: {}
 
-- model: plumbing.process
+- model: factopy.process
   pk: 6
   fields:
     polymorphic_ctype: 19
     name: 'Filter night''s images'
     description: 'Only pass the images with a solar elevation >= 10 degrees.'
 
-- model: plumbing.filter
+- model: factopy.filter
   pk: 6
   fields: {}
 
-- model: plumbing.process
+- model: factopy.process
   pk: 7
   fields:
     polymorphic_ctype: 18
     name: 'year'
     description: 'Classify the files by year.'
 
-- model: plumbing.collect
+- model: factopy.collect
   pk: 7
   fields: {}
 
-- model: plumbing.process
+- model: factopy.process
   pk: 8
   fields:
     polymorphic_ctype: 18
     name: 'year.Wweek'
     description: 'Classify the files by year and by week.'
 
-- model: plumbing.collect
+- model: factopy.collect
   pk: 8
   fields: {}
 
-- model: plumbing.processorder
+- model: factopy.processorder
   pk: 1
   fields:
     position: 1
     process: 3
     complex_process: 1
 
-- model: plumbing.processorder
+- model: factopy.processorder
   pk: 2
   fields:
     position: 2
     process: 4
     complex_process: 1
 
-- model: plumbing.processorder
+- model: factopy.processorder
   pk: 3
   fields:
     position: 3
     process: 5
     complex_process: 1
 
-- model: plumbing.processorder
+- model: factopy.processorder
   pk: 4
   fields:
     position: 4
     process: 6
     complex_process: 1
 
-- model: plumbing.processorder
+- model: factopy.processorder
   pk: 5
   fields:
     position: 5

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*- 
-from plumbing.models import ComplexProcess, Stream, Material, MaterialStatus
+from factopy.models import ComplexProcess, Stream, Material, MaterialStatus
 from django.test import TestCase
 from datetime import datetime
 import pytz

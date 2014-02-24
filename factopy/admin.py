@@ -1,6 +1,6 @@
 from django.contrib import admin
 from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModelAdmin, PolymorphicChildModelFilter
-from plumbing.models import TagManager, Stream, MaterialStatus, Material, Process, ProcessOrder, ComplexProcess, Filter, Collect, Adapt
+from factopy.models import TagManager, Stream, MaterialStatus, Material, Process, ProcessOrder, ComplexProcess, Filter, Collect, Adapt
 from django.forms import ModelForm
 
 

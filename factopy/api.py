@@ -1,4 +1,4 @@
-from plumbing.models import Stream, Material, MaterialStatus, Process
+from factopy.models import Stream, Material, MaterialStatus, Process
 from tastypie import fields
 from tastypie.authentication import SessionAuthentication
 from tastypie.resources import ModelResource
