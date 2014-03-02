@@ -5,3 +5,12 @@ local_settings.py
 factopy.egg-info
 dist
 .pypirc
+Python*
+aspects.py
+bin
+ez_setup.py
+factopy.sqlite3
+include
+lib
+python-aspects*
+setuptools*
