@@ -4,6 +4,7 @@ from test_collectors import *
 from test_complexprocesses import *
 from test_filters import *
 from test_importers import *
+from test_machines import *
 from test_materials import *
 from test_materialstatuses import *
 from test_processes import *
