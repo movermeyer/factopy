@@ -1,6 +1,5 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-import factopy
 
 # Api provide an easy way of automatically determining the URL conf.
 
