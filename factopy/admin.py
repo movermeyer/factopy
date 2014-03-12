@@ -19,7 +19,9 @@ class MaterialChildAdmin(PolymorphicChildModelAdmin):
 class MaterialAdmin(PolymorphicParentModelAdmin):
 	base_model = Material
 	list_filter = (PolymorphicChildModelFilter,)
-	child_models = []
+	child_models = (
+		(Material, MaterialChildAdmin),
+	)
 
 
 class MaterialStatusAdmin(admin.ModelAdmin):
