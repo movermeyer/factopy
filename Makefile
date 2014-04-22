@@ -99,6 +99,7 @@ Python$(PYLARGESUFIX_VER):
 
 $(PYTHONPATH): Python$(PYLARGESUFIX_VER)
 	@ $(call download,ez_setup.py,https://bitbucket.org/pypa/setuptools/raw/bootstrap)
+	@ (sudo rm /usr/local/lib/python2.7/site-packages/setuptools-*-py2.7.egg 2>&1) >> tracking.log
 	@ (sudo $(PYTHONLIBS) $(PYTHONPATH) ez_setup.py 2>&1) >> tracking.log
 
 $(LIBSQLITE3):
