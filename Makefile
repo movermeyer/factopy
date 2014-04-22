@@ -13,12 +13,12 @@ define compile
 	echo "[ compiling    ] $(1) with $(NPROC) cores" && \
 	(make -j $(NPROC) 2>&1) >> ../tracking.log && \
 	echo "[ installing   ] $(1)" && \
-	(sudo make install 2>&1) >> ../tracking.log
+	(sudo make $(4) 2>&1) >> ../tracking.log
 endef
 
 define install
 	@ $(call get,$(1),$(2),$(3))
-	@ $(call compile,$(1))
+	@ $(call compile,$(1),,,install)
 endef
 
 update_shared_libs=sudo ldconfig
@@ -94,8 +94,8 @@ unattended:
 	@ (sudo ls 2>&1) >> tracking.log
 
 Python$(PYLARGESUFIX_VER):
-	$(call get,Python$(PYLARGESUFIX_VER),Python$(PYLARGESUFIX_VER).tgz,http://legacy.python.org/ftp/python/$(PYLARGEVERSION))
-	$(call compile,Python$(PYLARGESUFIX_VER),$(PYTHONLIBS),--prefix=$(PYPREFIX_PATH) --with-threads --enable-shared)
+	$(call get,Python$(PYLARGESUFIX_VER),Python$(PYLARGESUFIX_VER).tgz,https://www.python.org/ftp/python/$(PYLARGEVERSION))
+	$(call compile,Python$(PYLARGESUFIX_VER),$(PYTHONLIBS),--prefix=$(PYPREFIX_PATH) --with-threads --enable-shared,altinstall)
 
 $(PYTHONPATH): Python$(PYLARGESUFIX_VER)
 	@ $(call download,ez_setup.py,https://bitbucket.org/pypa/setuptools/raw/bootstrap)
@@ -110,7 +110,7 @@ sqlite3: $(LIBSQLITE3)
 
 $(LIBPOSTGRES):
 	$(call get,postgresql-9.2.4,postgresql-9.2.4.tar.gz,ftp://ftp.postgresql.org/pub/source/v9.2.4)
-	$(call compile,postgresql-9.2.4,,--without-readline --without-zlib)
+	$(call compile,postgresql-9.2.4,,--without-readline --without-zlib,install)
 	@ ($(CONFIGURE_USER_POSTGRES) && \
 		sudo mkdir /usr/local/pgsql/data 2>&1 && \
 		sudo chown postgres:postgres /usr/local/pgsql/data 2>&1) >> tracking.log
