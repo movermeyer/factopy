@@ -1,7 +1,21 @@
 from django.contrib import admin
 from polymorphic.admin import PolymorphicParentModelAdmin, PolymorphicChildModelAdmin, PolymorphicChildModelFilter
-from factopy.models import TagManager, Stream, MaterialStatus, Material, Process, ProcessOrder, ComplexProcess, Filter, Collect, Adapt
+from factopy.models import BackendModel, Worker, Machine, Cluster, TagManager, Stream, MaterialStatus, Material, Process, ProcessOrder, ComplexProcess, Filter, Collect, Adapt
 from django.forms import ModelForm
+
+
+class BackendModelChildAdmin(PolymorphicChildModelAdmin):
+	base_model = BackendModel
+
+
+class BackendModelAdmin(PolymorphicParentModelAdmin):
+	base_model = BackendModel
+	list_filter = (PolymorphicChildModelFilter,)
+	child_models = (
+		(Worker, BackendModelChildAdmin),
+		(Machine, BackendModelChildAdmin),
+		(Cluster, BackendModelChildAdmin),
+	)
 
 
 class TagManagerAdmin(admin.ModelAdmin):
@@ -9,7 +23,7 @@ class TagManagerAdmin(admin.ModelAdmin):
 
 
 class StreamAdmin(admin.ModelAdmin):
-	list_display = ['created', 'modified']
+	list_display = ['unprocessed_count','created', 'modified']
 
 
 class MaterialChildAdmin(PolymorphicChildModelAdmin):
@@ -63,6 +77,7 @@ class ProcessAdmin(PolymorphicParentModelAdmin):
 	)
 
 
+admin.site.register(BackendModel, BackendModelAdmin)
 admin.site.register(TagManager, TagManagerAdmin)
 admin.site.register(Stream, StreamAdmin)
 admin.site.register(Material, MaterialAdmin)
