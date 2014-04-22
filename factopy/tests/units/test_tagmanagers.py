@@ -9,7 +9,7 @@ class TestTagManagers(TestCase):
 	fixtures = [ 'initial_data.yaml', '*']
 
 	def setUp(self):
-		self.tag_manager = TagManager.empty()
+		self.tag_manager = TagManager.create_empty()
 		self.loaded_tag_manager = TagManager(tag_string="vegetable,food,red,spice")
 
 	def test_serialization(self):
@@ -21,7 +21,7 @@ class TestTagManagers(TestCase):
 		self.assertEquals(unicode(self.loaded_tag_manager), result)
 		self.assertEquals(unicode(self.tag_manager), u'[]')
 
-	def test_empty(self):
+	def test_create_empty(self):
 		# check if empty() class method create and save an empty TagManager.
 		self.assertNotEquals(self.tag_manager.id, None)
 		# check when you use the standar initializer don't auto-save.
@@ -39,6 +39,14 @@ class TestTagManagers(TestCase):
 		self.assertTrue("spice" in the_list)
 		self.assertFalse("tomato" in the_list)
 		self.assertFalse("" in the_list)
+
+	def test_empty(self):
+		# check if the list is empty.
+		self.assertEquals(self.tag_manager.list(), [])
+		self.assertTrue(self.tag_manager.empty())
+		# check if the list is not empty.
+		self.assertNotEquals(self.loaded_tag_manager.list(), [])
+		self.assertFalse(self.loaded_tag_manager.empty())
 
 	def test_exist(self):
 		# check if the empty string is avoided from tag_manager.

@@ -12,7 +12,8 @@ class TestAdapters(TestCase):
 	def setUp(self):
 		self.stream = Stream()
 		self.stream.save()
-		self.adapter = Adapt.objects.get_or_create(name='abstract one', stream=self.stream)[0]
+		self.adapter = Adapt.objects.get_or_create(name='abstract one')[0]
+		self.adapter.streams.add(self.stream)
 
 	def test_update(self):
 		# check if the update method raise a "Subclass responsability" exception because the subclass

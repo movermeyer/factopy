@@ -7,7 +7,18 @@ class TestBackendModels(TestCase):
 	fixtures = [ 'initial_data.yaml', '*']
 
 	def setUp(self):
-		self.model = BackendModel()
+		self.model = BackendModel.objects.get(pk=3)
+		self.other_model = BackendModel.objects.get(pk=2)
+
+	def test_serialization(self):
+		# check if the __str__ method is defined to return the class name with the status.
+		model = u'Worker [uri: localhost, id: , status: off]'
+		other_model = u"Machine [uri: localhost, status: off]"
+		self.assertEquals(str(self.model), str(model))
+		self.assertEquals(str(self.other_model), str(other_model))
+		# check if the __unicode__ method is defined to return the class name with the status.
+		self.assertEquals(unicode(self.model), model)
+		self.assertEquals(unicode(self.other_model), other_model)
 
 	def test_status(self):
 		# check if the model status is off.

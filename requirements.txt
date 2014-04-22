@@ -9,3 +9,5 @@ lxml==2.3.6
 django-tastypie==0.11.0
 coveralls==0.3
 django-sslify==0.2.2
+Pyro4==4.24
+uWSGI==2.0.3

@@ -1,7 +1,14 @@
 from django.db import models
 from polymorphic import PolymorphicModel, PolymorphicManager
+from django.db.models.signals import pre_save, post_save
+from django.dispatch import receiver
 from datetime import datetime
 import pytz
+from itertools import tee, izip
+def pairwise(iterable):
+    a, b = tee(iterable)
+    next(b, None)
+    return izip(a, b)
 
 
 class TagManager(models.Model):
@@ -10,8 +17,8 @@ class TagManager(models.Model):
 	tag_string = models.TextField(db_index=True, default="")
 
 	@classmethod
-	def empty(klass):
-		tm = TagManager()
+	def create_empty(klass):
+		tm = klass()
 		tm.save()
 		return tm
 
@@ -22,6 +29,9 @@ class TagManager(models.Model):
 		l = self.tag_string.split(",")
 		if u"" in l: l.remove(u"")
 		return l
+
+	def empty(self):
+		return self.list() == []
 
 	def insert_first(self, tag):
 		if not self.exist(tag):
@@ -51,9 +61,23 @@ class TagManager(models.Model):
 class Stream(models.Model,object):
 	class Meta(object):
 		app_label = 'factopy'
-	tags = models.ForeignKey(TagManager, related_name='stream', default=TagManager.empty)
+	tags = models.ForeignKey(TagManager, related_name='stream', default=TagManager.create_empty)
+	unprocessed_count = models.IntegerField(default=0)
+	feed = models.ForeignKey('Process', related_name='streams', null=True)
 	created = models.DateTimeField(editable=False,default=datetime.utcnow().replace(tzinfo=pytz.UTC))
 	modified = models.DateTimeField(default=datetime.utcnow().replace(tzinfo=pytz.UTC))
+
+	@classmethod
+	def requiring_work(klass):
+		q = klass.objects.extra(select={'unprocessed_count': "unprocessed_count > '0'"})
+		q = klass.extra(order_by = ['-unprocessed_count'])
+		return q
+
+	@classmethod
+	def create_empty(klass):
+		s = klass()
+		s.save()
+		return s
 
 	def __str__(self):
 		return unicode(self).encode("utf-8")
@@ -127,6 +151,7 @@ class Process(PolymorphicModel,object):
 	objects = PolymorphicManager()
 	name = models.TextField(db_index=True)
 	description = models.TextField(db_index=True)
+	observed = models.ManyToManyField(Stream,related_name='observe',blank=True)
 
 	def __str__(self):
 		return unicode(Process.objects.get(id=self.id)).encode("utf-8")
@@ -163,6 +188,28 @@ class ComplexProcess(Process):
 					tmp_results += self.encapsulate_in_array(result)
 			stream = tmp_results
 		return stream
+
+	def update_wires(self, method):
+		ps = self.get_ordered_subprocesses()
+		if ps.count() > 0:
+			# input wires
+			if self.streams.count():
+				getattr(ps[0].observed, method)(self.streams.all()[0])
+			# internal wires
+			for p1, p2 in pairwise(ps):
+				getattr(p1.observed,method)(p2.streams.all()[0])
+			# output wires
+			last = ps.reverse()[0]
+			for o in self.observed.all():
+				getattr(last.observed,method)(o)
+
+@receiver(pre_save, sender=ComplexProcess)
+def unwire(sender, instance, *args, **kwargs):
+	instance.update_wires('remove')
+
+@receiver(post_save, sender=ComplexProcess)
+def wire(sender, instance, *args, **kwargs):
+	instance.update_wires('add')
 
 
 class ProcessOrder(models.Model):

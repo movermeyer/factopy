@@ -13,7 +13,8 @@ class TestImporters(TestCase):
 	def setUp(self):
 		self.stream = Stream()
 		self.stream.save()
-		self.importer = Importer.objects.get_or_create(name='abstract one', stream=self.stream)[0]
+		self.importer = Importer.objects.get_or_create(name='abstract one')[0]
+		self.importer.streams.add(self.stream)
 
 	def test_setup_unloaded(self):
 		# check if create a thread for each unloaded importer.

@@ -6,7 +6,6 @@ import threading
 class Adapt(Process):
 	class Meta(object):
 		app_label = 'factopy'
-	stream = models.ForeignKey(Stream, null=True, default=None)
 
 	def do(self, stream):
 		return stream

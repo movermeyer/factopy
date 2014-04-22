@@ -1,0 +1,264 @@
+[
+    {
+        "pk": 1,
+        "model": "factopy.stream",
+        "fields": {
+        	"feed": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "factopy.stream",
+        "fields": {
+        	"feed": 2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "factopy.stream",
+        "fields": {
+        	"feed": 3
+        }
+    },
+    {
+        "pk": 4,
+        "model": "factopy.stream",
+        "fields": {
+        	"feed": 4
+        }
+    },
+    {
+        "pk": 5,
+        "model": "factopy.stream",
+        "fields": {
+        	"feed": 5
+        }
+    },
+    {
+        "pk": 6,
+        "model": "factopy.stream",
+        "fields": {
+        	"feed": 6
+        }
+    },
+    {
+        "pk": 7,
+        "model": "factopy.stream",
+        "fields": {
+        	"feed": 7
+        }
+    },
+    {
+        "pk": 8,
+        "model": "factopy.stream",
+        "fields": {
+        	"feed": 8
+        }
+    },
+    {
+        "pk": 1,
+        "model": "factopy.process",
+        "fields": {
+            "polymorphic_ctype": 13,
+            "description": "Filter all images with solar elevation < 10 degrees.",
+            "name": "Filter nights and compact",
+			"observed": []
+        }
+    },
+    {
+        "pk": 1,
+        "model": "factopy.complexprocess",
+        "fields": {}
+    },
+    {
+        "pk": 2,
+        "model": "factopy.process",
+        "fields": {
+            "polymorphic_ctype": 15,
+            "description": "Compile all in a NetCDF4 file.",
+            "name": "Save",
+			"observed": []
+        }
+    },
+    {
+        "pk": 2,
+        "model": "factopy.adapt",
+        "fields": {}
+    },
+    {
+        "pk": 3,
+        "model": "factopy.process",
+        "fields": {
+            "polymorphic_ctype": 18,
+            "description": "Select GOES 13 Channel 1 (visible channel).",
+            "name": "G13C1",
+            "observed": [4]
+        }
+    },
+    {
+        "pk": 3,
+        "model": "factopy.filter",
+        "fields": {}
+    },
+    {
+        "pk": 4,
+        "model": "factopy.process",
+        "fields": {
+            "polymorphic_ctype": 17,
+            "description": "Classify the files by year and by month.",
+            "name": "year.Mmonth",
+            "observed": [5]
+        }
+    },
+    {
+        "pk": 4,
+        "model": "factopy.collect",
+        "fields": {}
+    },
+    {
+        "pk": 5,
+        "model": "factopy.process",
+        "fields": {
+            "polymorphic_ctype": 17,
+            "description": "Aggregate images by channel number",
+            "name": "Channel classify",
+            "observed": [6]
+        }
+    },
+    {
+        "pk": 5,
+        "model": "factopy.collect",
+        "fields": {}
+    },
+    {
+        "pk": 6,
+        "model": "factopy.process",
+        "fields": {
+            "polymorphic_ctype": 18,
+            "description": "Only pass the images with a solar elevation >= 10 degrees.",
+            "name": "Filter night's images",
+            "observed": [2]
+        }
+    },
+    {
+        "pk": 6,
+        "model": "factopy.filter",
+        "fields": {}
+    },
+    {
+        "pk": 7,
+        "model": "factopy.process",
+        "fields": {
+            "polymorphic_ctype": 17,
+            "description": "Classify the files by year.",
+            "name": "year",
+			"observed": []
+        }
+    },
+    {
+        "pk": 7,
+        "model": "factopy.collect",
+        "fields": {}
+    },
+    {
+        "pk": 8,
+        "model": "factopy.process",
+        "fields": {
+            "polymorphic_ctype": 17,
+            "description": "Classify the files by year and by week.",
+            "name": "year.Wweek",
+			"observed": []
+        }
+    },
+    {
+        "pk": 8,
+        "model": "factopy.collect",
+        "fields": {}
+    },
+    {
+        "pk": 1,
+        "model": "factopy.processorder",
+        "fields": {
+            "process": 3,
+            "position": 1,
+            "complex_process": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "factopy.processorder",
+        "fields": {
+            "process": 4,
+            "position": 2,
+            "complex_process": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "factopy.processorder",
+        "fields": {
+            "process": 5,
+            "position": 3,
+            "complex_process": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "factopy.processorder",
+        "fields": {
+            "process": 6,
+            "position": 4,
+            "complex_process": 1
+        }
+    },
+    {
+        "pk": 5,
+        "model": "factopy.processorder",
+        "fields": {
+            "process": 2,
+            "position": 5,
+            "complex_process": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "factopy.backendmodel",
+        "fields": {
+            "polymorphic_ctype": 22
+        }
+    },
+    {
+        "pk": 1,
+        "model": "factopy.cluster",
+        "fields": {}
+    },
+    {
+        "pk": 2,
+        "model": "factopy.backendmodel",
+        "fields": {
+            "ip": "192.168.101.100",
+            "polymorphic_ctype": 21
+        }
+    },
+    {
+        "pk": 2,
+        "model": "factopy.machine",
+        "fields": {
+            "cluster": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "factopy.backendmodel",
+        "fields": {
+            "polymorphic_ctype": 20
+        }
+    },
+    {
+        "pk": 3,
+        "model": "factopy.worker",
+        "fields": {
+            "machine": 2
+        }
+    }
+]
