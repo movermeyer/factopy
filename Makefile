@@ -166,7 +166,6 @@ postgres-requirements:
 db-migrate: $(DATABASE_REQUIREMENTS)
 	@ echo "[ migrating    ] setting up the database structure"	
 	@ ($(SOURCE_ACTIVATE) $(PYTHON) manage.py syncdb --noinput 2>&1) >> ../tracking.log
-	@ ($(SOURCE_ACTIVATE) $(PYTHON) manage.py migrate 2>&1) >> ../tracking.log
 
 deploy: libs-and-headers bin/activate db-migrate
 
