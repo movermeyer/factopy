@@ -75,6 +75,7 @@ export PYSHORTSUFIX_VER=$(PYCONCAT)$(PYSHORTVERSION)
 export PYLARGESUFIX_VER=$(PYCONCAT)$(PYLARGEVERSION)
 
 PYPREFIX_PATH=/usr/local
+SETUPTOOLSFILES=$(PYPREFIX_PATH)/lib/python$(PYSHORTVERSION)/site-packages/setuptools-*-py$(PYSHORTVERSION).egg
 PYTHONLIBS=LD_LIBRARY_PATH=/usr/local/lib
 PYTHONPATH=$(PYPREFIX_PATH)/bin/python$(PYSHORTVERSION)
 FIRST_EASYINSTALL=$(PYTHONLIBS) $(PYPREFIX_PATH)/bin/easy_install$(PYSHORTSUFIX_VER)
@@ -98,8 +99,7 @@ Python$(PYLARGESUFIX_VER):
 	$(call compile,Python$(PYLARGESUFIX_VER),$(PYTHONLIBS),--prefix=$(PYPREFIX_PATH) --with-threads --enable-shared,altinstall)
 
 $(PYTHONPATH): Python$(PYLARGESUFIX_VER)
-	@ $(call download,ez_setup.py,https://bitbucket.org/pypa/setuptools/raw/bootstrap)
-	@ (sudo rm /usr/local/lib/python2.7/site-packages/setuptools-*-py2.7.egg 2>&1) >> tracking.log
+	@ (sudo rm -f $(SETUPTOOLSFILES) 2>&1) >> tracking.log
 	@ (sudo $(PYTHONLIBS) $(PYTHONPATH) ez_setup.py 2>&1) >> tracking.log
 
 $(LIBSQLITE3):
@@ -200,7 +200,7 @@ pypi-upload: test
 
 clean: pg-stop
 	@ echo "[ cleaning     ] remove deployment generated files that doesn't exists in the git repository"
-	@ sudo rm -rf sqlite* postgresql* hdf5* netcdf-4* python-aspects* virtualenv* bin/ lib/ lib64 include/ build/ share Python-* .Python ez_setup.py setuptools-*.tar.gz get-pip.py tracking.log factopy.sqlite3 aspects.py subversion
+	@ sudo rm -rf sqlite* postgresql* hdf5* netcdf-4* python-aspects* virtualenv* bin/ lib/ lib64 include/ build/ share Python-* .Python setuptools-*.tar.gz get-pip.py tracking.log factopy.sqlite3 aspects.py subversion
 
 hardclean: clean
 	@ echo "[ cleaning     ] remove compiled libraries and the database engine"

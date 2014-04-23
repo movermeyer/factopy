@@ -8,7 +8,6 @@ dist
 Python*
 aspects.py
 bin
-ez_setup.py
 factopy.sqlite3
 include
 lib
