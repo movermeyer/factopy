@@ -1,4 +1,10 @@
+doc-warnings: no
+test-warnings: yes
+strictness: veryhigh
+max-line-length: 300
 uses:
-	- django
+    - django
+autodetect: yes
 ignore-paths:
-    - ez_setup.py
+ignore-patterns:
+    - ^ez_setup.py$
