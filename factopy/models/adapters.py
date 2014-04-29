@@ -4,25 +4,25 @@ import threading
 
 
 class Adapt(Process):
-	class Meta(object):
-		app_label = 'factopy'
+    class Meta(object):
+        app_label = 'factopy'
 
-	def do(self, stream):
-		return stream
+    def do(self, stream):
+        return stream
 
-	def update(self):
-		raise Exception("Subclass responsability")
+    def update(self):
+        raise Exception("Subclass responsability")
 
 
 class Importer(Adapt):
-	class Meta(object):
-			app_label = 'factopy'
-	frequency = models.IntegerField(default=15*60) # It is expressed in seconds
+    class Meta(object):
+            app_label = 'factopy'
+    frequency = models.IntegerField(default=15*60) # It is expressed in seconds
 
-	@classmethod
-	def setup_unloaded(klass):
-		importers = [ i for i in klass.objects.all() if not hasattr(i,"thread") ]
-		for i in importers:
-			i.thread = threading.Timer(i.frequency, i.update)
-			i.thread.start()
-		return importers
+    @classmethod
+    def setup_unloaded(klass):
+        importers = [ i for i in klass.objects.all() if not hasattr(i,"thread") ]
+        for i in importers:
+            i.thread = threading.Timer(i.frequency, i.update)
+            i.thread.start()
+        return importers
