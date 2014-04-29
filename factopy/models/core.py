@@ -70,7 +70,7 @@ class Stream(models.Model,object):
 	@classmethod
 	def requiring_work(klass):
 		q = klass.objects.extra(select={'unprocessed_count': "unprocessed_count > '0'"})
-		q = klass.extra(order_by = ['-unprocessed_count'])
+		q = q.extra(order_by = ['-unprocessed_count'])
 		return q
 
 	@classmethod

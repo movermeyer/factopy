@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*-
 from factopy.models import *
 from django.test import TestCase
 from datetime import datetime
@@ -65,3 +65,12 @@ class TestStreams(TestCase):
 			fs.delete()
 		# check if return False when it hasn't got pending files.
 		self.assertTrue(self.stream.empty())
+
+	def test_create_empty(self):
+		# check if it create an empty stream.
+		stream = Stream.create_empty()
+		self.assertEquals(stream.__class__, Stream)
+		self.assertTrue(stream.tags.empty())
+		self.assertEquals(stream.unprocessed_count, 0)
+		self.assertEquals(stream.feed, None)
+		self.assertEquals(Stream.objects.filter(id=stream.id).count(), 1)
