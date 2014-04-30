@@ -5,6 +5,8 @@ from django.dispatch import receiver
 from datetime import datetime
 import pytz
 from itertools import tee, izip
+
+
 def pairwise(iterable):
     a, b = tee(iterable)
     next(b, None)
@@ -27,7 +29,8 @@ class TagManager(models.Model):
 
     def list(self):
         l = self.tag_string.split(",")
-        if u"" in l: l.remove(u"")
+        if u"" in l:
+            l.remove(u"")
         return l
 
     def empty(self):
@@ -35,10 +38,11 @@ class TagManager(models.Model):
 
     def insert_first(self, tag):
         if not self.exist(tag):
-            self.tag_string = (tag + "," + self.tag_string)  if len(self.tag_string) > 0 else tag
+            self.tag_string = ((tag + "," + self.tag_string)
+                               if len(self.tag_string) > 0 else tag)
             self.save()
 
-    def append(self,tag):
+    def append(self, tag):
         if not self.exist(tag):
             self.tag_string += ("," + tag) if len(self.tag_string) > 0 else tag
             self.save()
@@ -58,19 +62,25 @@ class TagManager(models.Model):
         return u'[%s]' % self.tag_string
 
 
-class Stream(models.Model,object):
+class Stream(models.Model, object):
     class Meta(object):
         app_label = 'factopy'
-    tags = models.ForeignKey(TagManager, related_name='stream', default=TagManager.create_empty)
+    tags = models.ForeignKey(TagManager, related_name='stream',
+                             default=TagManager.create_empty)
     unprocessed_count = models.IntegerField(default=0)
     feed = models.ForeignKey('Process', related_name='streams', null=True)
-    created = models.DateTimeField(editable=False,default=datetime.utcnow().replace(tzinfo=pytz.UTC))
-    modified = models.DateTimeField(default=datetime.utcnow().replace(tzinfo=pytz.UTC))
+    created = models.DateTimeField(
+        editable=False,
+        default=datetime.utcnow().replace(tzinfo=pytz.UTC))
+    modified = models.DateTimeField(
+        default=datetime.utcnow().replace(tzinfo=pytz.UTC))
 
     @classmethod
     def requiring_work(klass):
-        q = klass.objects.extra(select={'unprocessed_count': "unprocessed_count > '0'"})
-        q = q.extra(order_by = ['-unprocessed_count'])
+        q = klass.objects.extra(select={
+            'unprocessed_count': "unprocessed_count > '0'"
+        })
+        q = q.extra(order_by=['-unprocessed_count'])
         return q
 
     @classmethod
@@ -120,7 +130,9 @@ class Material(PolymorphicModel, object):
         return unicode(Material.objects.get(id=self.id)).encode("utf-8")
 
     def __unicode__(self):
-        return u'(created: %s, modified: %s)' % (unicode(self.created), unicode(self.modified))
+        return u'(created: %s, modified: %s)' % (
+            unicode(self.created),
+            unicode(self.modified))
 
 
 class MaterialStatus(models.Model):
@@ -139,19 +151,22 @@ class MaterialStatus(models.Model):
         return u'%s -> %s' % (unicode(self.stream), unicode(self.material))
 
     def clone_for(self, stream):
-        cloned_material_status = MaterialStatus(material=self.material,stream=stream)
+        cloned_material_status = MaterialStatus(material=self.material,
+                                                stream=stream)
         cloned_material_status.save()
         return cloned_material_status
 
 
-class Process(PolymorphicModel,object):
+class Process(PolymorphicModel, object):
     class Meta(object):
         app_label = 'factopy'
         verbose_name_plural = 'Processes'
     objects = PolymorphicManager()
     name = models.TextField(db_index=True)
     description = models.TextField(db_index=True)
-    observed = models.ManyToManyField(Stream,related_name='observe',blank=True)
+    observed = models.ManyToManyField(Stream,
+                                      related_name='observe',
+                                      blank=True)
 
     def __str__(self):
         return unicode(Process.objects.get(id=self.id)).encode("utf-8")
@@ -166,11 +181,12 @@ class Process(PolymorphicModel,object):
 class ComplexProcess(Process):
     class Meta(object):
         app_label = 'factopy'
-    processes = models.ManyToManyField('Process', through='ProcessOrder', related_name='complex_process')
+    processes = models.ManyToManyField('Process', through='ProcessOrder',
+                                       related_name='complex_process')
 
     def encapsulate_in_array(self, streams):
-        if not streams.__class__ in [list, tuple]:
-            streams = [ streams ]
+        if streams.__class__ not in [list, tuple]:
+            streams = [streams]
         return streams
 
     def get_ordered_subprocesses(self):
@@ -197,15 +213,17 @@ class ComplexProcess(Process):
                 getattr(ps[0].observed, method)(self.streams.all()[0])
             # internal wires
             for p1, p2 in pairwise(ps):
-                getattr(p1.observed,method)(p2.streams.all()[0])
+                getattr(p1.observed, method)(p2.streams.all()[0])
             # output wires
             last = ps.reverse()[0]
             for o in self.observed.all():
-                getattr(last.observed,method)(o)
+                getattr(last.observed, method)(o)
+
 
 @receiver(pre_save, sender=ComplexProcess)
 def unwire(sender, instance, *args, **kwargs):
     instance.update_wires('remove')
+
 
 @receiver(post_save, sender=ComplexProcess)
 def wire(sender, instance, *args, **kwargs):
