@@ -11,3 +11,4 @@ coveralls==0.3
 django-sslify==0.2.2
 Pyro4==4.24
 uWSGI==2.0.3
+ipython==2.0.0
