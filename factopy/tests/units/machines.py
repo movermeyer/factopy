@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*- 
-from factopy.models import *
+# -*- coding: utf-8 -*-
+from factopy.models import Worker, Machine
 from django.test import TestCase
 import multiprocessing as mp
 
 
 class TestMachines(TestCase):
-    fixtures = [ 'initial_data.yaml', '*']
+    fixtures = ['initial_data.yaml', '*']
 
     def setUp(self):
         self.machine = Machine()
         self.machine.save()
         for i in range(2):
             w = Worker()
-            w.machine=self.machine
+            w.machine = self.machine
             w.save()
 
     def tearDown(self):

@@ -13,7 +13,7 @@ class Filter(Process):
         for fs in stream.materials.all():
             if self.should_be_cloned(fs):
                 fs.clone_for(resultant_stream)
-            fs.processed=True
+            fs.processed = True
             fs.save()
         return resultant_stream
 

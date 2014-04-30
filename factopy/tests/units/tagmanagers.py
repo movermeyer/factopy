@@ -1,23 +1,24 @@
-# -*- coding: utf-8 -*- 
-from factopy.models import *
+# -*- coding: utf-8 -*-
+from factopy.models import TagManager
 from django.test import TestCase
-from datetime import datetime
-import pytz
 
 
 class TestTagManagers(TestCase):
-    fixtures = [ 'initial_data.yaml', '*']
+    fixtures = ['initial_data.yaml', '*']
 
     def setUp(self):
         self.tag_manager = TagManager.create_empty()
-        self.loaded_tag_manager = TagManager(tag_string="vegetable,food,red,spice")
+        self.loaded_tag_manager = TagManager(
+            tag_string="vegetable,food,red,spice")
 
     def test_serialization(self):
-        # check if the __str__ method is defined to return the list of tags as string.
+        # check if the __str__ method is defined to return the list of tags as
+        # string.
         result = u'[%s]' % self.loaded_tag_manager.tag_string
         self.assertEquals(str(self.loaded_tag_manager), str(result))
         self.assertEquals(str(self.tag_manager), str(u'[]'))
-        # check if the __unicode__ method is defined to return the list of tags as string.
+        # check if the __unicode__ method is defined to return the list of tags
+        # as string.
         self.assertEquals(unicode(self.loaded_tag_manager), result)
         self.assertEquals(unicode(self.tag_manager), u'[]')
 
@@ -83,7 +84,9 @@ class TestTagManagers(TestCase):
         # check if it insert the element at the begining of the loaded list.
         self.assertFalse(self.loaded_tag_manager.exist("tomato"))
         self.loaded_tag_manager.insert_first("tomato")
-        self.assertEquals(self.loaded_tag_manager.list(), ["tomato","vegetable","food","red","spice"])
+        self.assertEquals(
+            self.loaded_tag_manager.list(),
+            ["tomato", "vegetable", "food", "red", "spice"])
 
     def test_append(self):
         # check if it insert the element at the begining of the empty list.
@@ -99,11 +102,15 @@ class TestTagManagers(TestCase):
         # check if it insert the element at the begining of the loaded list.
         self.assertFalse(self.loaded_tag_manager.exist("tomato"))
         self.loaded_tag_manager.append("tomato")
-        self.assertEquals(self.loaded_tag_manager.list(), ["vegetable","food","red","spice","tomato"])
+        self.assertEquals(
+            self.loaded_tag_manager.list(),
+            ["vegetable", "food", "red", "spice", "tomato"])
 
     def test_make_filename(self):
         # check if it return a string with the tags concatenated.
-        tags = ["goes13","2011","M06","BAND_01"]
+        tags = ["goes13", "2011", "M06", "BAND_01"]
         for t in tags:
             self.tag_manager.append(t)
-        self.assertEquals(self.tag_manager.make_filename(), "goes13.2011.M06.BAND_01")
+        self.assertEquals(
+            self.tag_manager.make_filename(),
+            "goes13.2011.M06.BAND_01")

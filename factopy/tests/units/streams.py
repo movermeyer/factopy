@@ -1,39 +1,48 @@
 # -*- coding: utf-8 -*-
-from factopy.models import *
+from factopy.models import Stream, Material, MaterialStatus
 from django.test import TestCase
 from datetime import datetime
 import pytz
-import glob
-import random
 
 
 class TestStreams(TestCase):
-    fixtures = [ 'initial_data.yaml', '*']
+    fixtures = ['initial_data.yaml', '*']
 
     def setUp(self):
         self.begin = datetime.utcnow().replace(tzinfo=pytz.UTC)
         self.stream = Stream()
         self.stream.save()
         self.end = datetime.utcnow().replace(tzinfo=pytz.UTC)
-        self.materials = [ Material() for i in range(1,13)]
+        self.materials = [Material() for i in range(1, 13)]
         for i in range(len(self.materials)):
             self.materials[i].save()
-            ms = MaterialStatus.objects.get_or_create(material=self.materials[i],stream=self.stream,processed=(i%2==0))[0]
+            ms = MaterialStatus.objects.get_or_create(
+                material=self.materials[i],
+                stream=self.stream,
+                processed=(i % 2 == 0)
+            )[0]
             ms.save()
 
     def test_serialization(self):
-        # check if the __str__ method is defined to return the object pk and tags parameter.
-        result = u'%s %s' % (unicode(self.stream.pk), unicode(self.stream.tags))
+        # check if the __str__ method is defined to return the object pk and
+        # tags parameter.
+        result = u'%s %s' % (
+            unicode(self.stream.pk),
+            unicode(self.stream.tags)
+        )
         self.assertEquals(str(self.stream), str(result))
-        # check if the __unicode__ method is defined to return the object pk and tags parameter.
+        # check if the __unicode__ method is defined to return the object pk
+        # and tags parameter.
         self.assertEquals(unicode(self.stream), result)
 
     def test_save(self):
-        # check if hte instance was created between the begining and the ending of the setup.
+        # check if hte instance was created between the begining and the ending
+        # of the setup.
         self.assertTrue(self.begin <= self.stream.created <= self.end)
         # check if the created and modified datetime are equals
         self.assertEquals(self.stream.created, self.stream.modified)
-        # check if the modified datetime change when the objects is saved again.
+        # check if the modified datetime change when the objects is saved
+        # again.
         self.stream.save()
         self.assertTrue(self.stream.modified > self.stream.created)
 
@@ -46,7 +55,8 @@ class TestStreams(TestCase):
         # check if the cloned stream has all the tags
         self.assertNotEquals(clone.tags, self.stream.tags)
         self.assertEquals(clone.tags.list(), self.stream.tags.list())
-        # check if the cloned stream is empty, and if the clone method avoid clone the files.
+        # check if the cloned stream is empty, and if the clone method avoid
+        # clone the files.
         self.assertEquals(self.stream.materials.count(), 12)
         self.assertEquals(clone.materials.count(), 0)
 

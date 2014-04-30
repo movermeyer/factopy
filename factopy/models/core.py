@@ -216,7 +216,7 @@ class ProcessOrder(models.Model):
     class Meta(object):
         app_label = 'factopy'
     position = models.IntegerField()
-    process = models.ForeignKey('Process', related_name='used_by')
+    process = models.OneToOneField('Process', related_name='used_by')
     complex_process = models.ForeignKey(ComplexProcess)
 
     def __str__(self):

@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*- 
-from factopy.models import *
+# -*- coding: utf-8 -*-
+from factopy.models import Stream, Adapt
 from django.test import TestCase
-from datetime import datetime
-import pytz
-import random
 
 
 class TestAdapters(TestCase):
-    fixtures = [ 'initial_data.yaml', '*']
+    fixtures = ['initial_data.yaml', '*']
 
     def setUp(self):
         self.stream = Stream()
@@ -16,8 +13,8 @@ class TestAdapters(TestCase):
         self.adapter.streams.add(self.stream)
 
     def test_update(self):
-        # check if the update method raise a "Subclass responsability" exception because the subclass
-        # should implement the method update.
+        # check if the update method raise a "Subclass responsability"
+        # exception  because the subclass should implement the method update.
         with self.assertRaises(Exception) as err:
             self.adapter.update()
         self.assertEquals(unicode(err.exception), u"Subclass responsability")

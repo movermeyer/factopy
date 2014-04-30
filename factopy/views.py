@@ -5,6 +5,7 @@ from factopy.models import ComplexProcess, Importer
 
 # Create your views here.
 
+
 def index(request):
     program_list = ComplexProcess.objects.all()
     template = loader.get_template('factopy/index.html')
@@ -13,14 +14,17 @@ def index(request):
     })
     return HttpResponse(template.render(context))
 
+
 def execute(request, program_id):
     programs = ComplexProcess.objects.filter(id=program_id)
     programs[0].execute()
     return redirect('/factopy/status')
 
+
 def status(request):
     programs = ComplexProcess.objects.all()
     return render(request, 'factopy/status.html', {'programs': programs})
+
 
 def update(request):
     new_importers = len(Importer.setup_unloaded())
