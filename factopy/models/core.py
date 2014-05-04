@@ -1,16 +1,7 @@
 from django.db import models
 from polymorphic import PolymorphicModel, PolymorphicManager
-from django.db.models.signals import pre_save, post_save
-from django.dispatch import receiver
 from datetime import datetime
 import pytz
-from itertools import tee, izip
-
-
-def pairwise(iterable):
-    a, b = tee(iterable)
-    next(b, None)
-    return izip(a, b)
 
 
 class TagManager(models.Model):
