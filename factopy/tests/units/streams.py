@@ -26,9 +26,11 @@ class TestStreams(TestCase):
     def test_serialization(self):
         # check if the __str__ method is defined to return the object pk and
         # tags parameter.
-        result = u'%s %s' % (
+        result = u'[id: %s tags: %s unprocessed: %s] -> %s' % (
             unicode(self.stream.pk),
-            unicode(self.stream.tags)
+            unicode(self.stream.tags),
+            unicode(self.stream.unprocessed_count),
+            unicode(self.stream.feed)
         )
         self.assertEquals(str(self.stream), str(result))
         # check if the __unicode__ method is defined to return the object pk
