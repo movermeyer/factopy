@@ -169,6 +169,7 @@ db-migrate: $(DATABASE_REQUIREMENTS)
 	@ ($(SOURCE_ACTIVATE) $(PYTHON) manage.py syncdb --noinput 2>&1) >> ../tracking.log
 
 deploy: libs-and-headers bin/activate db-migrate
+	@ echo "[ deployed     ] the system was completly deployed"
 
 show-version:
 	@ $(SOURCE_ACTIVATE) $(PYTHON) --version
@@ -185,6 +186,7 @@ runbackend:
 
 test:
 	@ $(SOURCE_ACTIVATE) $(PYTHON) manage.py test factopy
+	@ echo "[ tested       ] the system was completly tested"
 
 test-coverage-travis-ci:
 	@ $(SOURCE_ACTIVATE) coverage run --source='factopy/models/' manage.py test factopy
@@ -197,6 +199,7 @@ test-coverage: test-coverage-travis-ci test-coveralls
 pypi-upload: test
 	@ echo "[ uploading    ] package to pypi servers"
 	@ ($(SOURCE_ACTIVATE) $(PYTHON) setup.py sdist upload 2>&1) >> tracking.log
+	@ echo "[ uploaded     ] the new version was successfully uploaded"
 
 shell:
 	$(SOURCE_ACTIVATE) $(PYTHON) manage.py shell
