@@ -179,41 +179,28 @@
         "pk": 1,
         "model": "factopy.backendmodel",
         "fields": {
-            "polymorphic_ctype": 20
-        }
-    },
-    {
-        "pk": 1,
-        "model": "factopy.cluster",
-        "fields": {}
-    },
-    {
-        "pk": 2,
-        "model": "factopy.backendmodel",
-        "fields": {
-            "ip": "192.168.101.100",
             "polymorphic_ctype": 19
         }
     },
     {
-        "pk": 2,
-        "model": "factopy.machine",
+        "pk": 1,
+        "model": "factopy.node",
         "fields": {
-            "cluster": 1
+            "ip": "192.168.101.100"
         }
     },
     {
-        "pk": 3,
+        "pk": 2,
         "model": "factopy.backendmodel",
         "fields": {
             "polymorphic_ctype": 18
         }
     },
     {
-        "pk": 3,
+        "pk": 2,
         "model": "factopy.worker",
         "fields": {
-            "machine": 2
+            "node": 1
         }
     }
 ]

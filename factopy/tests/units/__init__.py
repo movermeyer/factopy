@@ -3,7 +3,6 @@ from backendmodels import *
 from collectors import *
 from filters import *
 from importers import *
-from machines import *
 from materials import *
 from materialstatuses import *
 from processes import *
