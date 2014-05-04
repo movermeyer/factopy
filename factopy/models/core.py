@@ -173,9 +173,3 @@ class Process(PolymorphicModel, object):
 
     def mark_with_tags(self, stream):
         pass
-
-    def notify(self, stream):
-        self.observers.add(stream)
-
-    def not_notify(self, stream):
-        self.observers.add(stream)
