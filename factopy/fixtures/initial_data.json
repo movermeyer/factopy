@@ -123,7 +123,7 @@
         "pk": 5,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 14,
+            "polymorphic_ctype": 15,
             "description": "Aggregate images by channel number",
             "name": "Channel classify"
         }
@@ -179,28 +179,15 @@
         "pk": 1,
         "model": "factopy.backendmodel",
         "fields": {
-            "polymorphic_ctype": 19
+            "polymorphic_ctype": 18
         }
     },
     {
         "pk": 1,
         "model": "factopy.node",
         "fields": {
-            "ip": "192.168.101.100"
-        }
-    },
-    {
-        "pk": 2,
-        "model": "factopy.backendmodel",
-        "fields": {
-            "polymorphic_ctype": 18
-        }
-    },
-    {
-        "pk": 2,
-        "model": "factopy.worker",
-        "fields": {
-            "node": 1
+            "ip": "192.168.101.100",
+            "manager_amount": 5
         }
     }
 ]
