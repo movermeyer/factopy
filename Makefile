@@ -28,8 +28,6 @@ ifeq ($(OS), Darwin)
 	update_shared_libs=
 	LIBPOSTGRES=/usr/local/pgsql/lib/libpq.5.5.dylib
 	LIBSQLITE3=/usr/local/lib/libsqlite3.0.dylib
-	LIBHDF5=/usr/local/lib/libhdf5_hl.8.dylib
-	LIBNETCDF=/usr/local/lib/libnetcdf.7.dylib
 	CONFIGURE_USER_POSTGRES= \
 		sudo dscl . -create /Users/postgres UniqueID 174 && \
 		sudo dscl . -create /Users/postgres PrimaryGroupID 174 && \
@@ -49,8 +47,6 @@ ifeq ($(OS), Linux)
 	NPROC=$(shell nproc)
 	LIBPOSTGRES=/usr/local/pgsql/lib/libpq.so.5.5
 	LIBSQLITE3=/usr/local/lib/libsqlite3.so.0.8.6
-	LIBHDF5=/usr/local/lib/libhdf5.so.8.0.1
-	LIBNETCDF=/usr/local/lib/libnetcdf.so.7.2.0
 	CONFIGURE_USER_POSTGRES= ( sudo grep postgres /etc/passwd || \
 		( sudo adduser postgres && \
 		sudo passwd postgres ) && \
@@ -206,10 +202,10 @@ shell:
 
 clean: pg-stop
 	@ echo "[ cleaning     ] remove deployment generated files that doesn't exists in the git repository"
-	@ sudo rm -rf sqlite* postgresql* hdf5* netcdf-4* python-aspects* virtualenv* bin/ lib/ lib64 include/ build/ share Python-* .Python setuptools-*.tar.gz get-pip.py tracking.log factopy.sqlite3 aspects.py subversion
+	@ sudo rm -rf sqlite* postgresql* python-aspects* virtualenv* bin/ lib/ lib64 include/ build/ share Python-* .Python setuptools-*.tar.gz get-pip.py tracking.log factopy.sqlite3 aspects.py subversion
 
 hardclean: clean
 	@ echo "[ cleaning     ] remove compiled libraries and the database engine"
 	@ cd /usr/local/bin && sudo rm -rf python* sqlite3
-	@ cd /usr/local/lib && sudo rm -rf libpython* libhdf5* libnetcdf* libsqlite3* python*
+	@ cd /usr/local/lib && sudo rm -rf libpython* libsqlite3* python*
 	@ cd /usr/local && sudo rm -rf pgsql*
