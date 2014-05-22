@@ -1,7 +1,7 @@
 from django.contrib import admin
 from polymorphic.admin import PolymorphicParentModelAdmin, \
     PolymorphicChildModelAdmin, PolymorphicChildModelFilter
-from factopy.models import BackendModel, Node, TagManager, Stream, \
+from factopy.models import BackendModel, Node, Stream, \
     MaterialStatus, Material, Process, Filter, Collect, Adapt
 
 

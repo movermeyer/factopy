@@ -67,7 +67,7 @@
         "pk": 1,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 13,
+            "polymorphic_ctype": 12,
             "description": "Filter all images with solar elevation < 10 degrees.",
             "name": "Filter nights and compact"
         }
@@ -81,7 +81,7 @@
         "pk": 2,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 13,
+            "polymorphic_ctype": 12,
             "description": "Compile all in a NetCDF4 file.",
             "name": "Save"
         }
@@ -95,7 +95,7 @@
         "pk": 3,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 16,
+            "polymorphic_ctype": 15,
             "description": "Select GOES 13 Channel 1 (visible channel).",
             "name": "G13C1"
         }
@@ -109,7 +109,7 @@
         "pk": 4,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 15,
+            "polymorphic_ctype": 14,
             "description": "Classify the files by year and by month.",
             "name": "year.Mmonth"
         }
@@ -123,7 +123,7 @@
         "pk": 5,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 15,
+            "polymorphic_ctype": 14,
             "description": "Aggregate images by channel number",
             "name": "Channel classify"
         }
@@ -137,7 +137,7 @@
         "pk": 6,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 16,
+            "polymorphic_ctype": 15,
             "description": "Only pass the images with a solar elevation >= 10 degrees.",
             "name": "Filter night's images"
         }
@@ -151,7 +151,7 @@
         "pk": 7,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 15,
+            "polymorphic_ctype": 14,
             "description": "Classify the files by year.",
             "name": "year"
         }
@@ -165,7 +165,7 @@
         "pk": 8,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 15,
+            "polymorphic_ctype": 14,
             "description": "Classify the files by year and by week.",
             "name": "year.Wweek"
         }
@@ -179,7 +179,7 @@
         "pk": 1,
         "model": "factopy.backendmodel",
         "fields": {
-            "polymorphic_ctype": 18
+            "polymorphic_ctype": 17
         }
     },
     {

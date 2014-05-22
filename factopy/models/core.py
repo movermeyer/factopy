@@ -4,60 +4,9 @@ from datetime import datetime
 import pytz
 
 
-class TagManager(models.Model):
-    class Meta(object):
-        app_label = 'factopy'
-    tag_string = models.TextField(db_index=True, default="")
-
-    @classmethod
-    def create_empty(klass):
-        tm = klass()
-        tm.save()
-        return tm
-
-    def exist(self, tag):
-        return tag in self.list()
-
-    def list(self):
-        l = self.tag_string.split(",")
-        if u"" in l:
-            l.remove(u"")
-        return l
-
-    def empty(self):
-        return self.list() == []
-
-    def insert_first(self, tag):
-        if not self.exist(tag):
-            self.tag_string = ((tag + "," + self.tag_string)
-                               if len(self.tag_string) > 0 else tag)
-            self.save()
-
-    def append(self, tag):
-        if not self.exist(tag):
-            self.tag_string += ("," + tag) if len(self.tag_string) > 0 else tag
-            self.save()
-
-    def clone(self):
-        t = TagManager(tag_string=self.tag_string)
-        t.save()
-        return t
-
-    def make_filename(self):
-        return ".".join(self.list())
-
-    def __str__(self):
-        return unicode(self).encode("utf-8")
-
-    def __unicode__(self):
-        return u'[%s]' % self.tag_string
-
-
 class Stream(models.Model, object):
     class Meta(object):
         app_label = 'factopy'
-    # tags = models.ForeignKey(TagManager, related_name='stream',
-    #                         default=TagManager.create_empty)
     unprocessed_count = models.IntegerField(default=0)
     observe = models.ManyToManyField('Process',
                                      related_name='observers',
