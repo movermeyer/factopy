@@ -19,16 +19,9 @@ class TestCollectors(TestCase):
             ms = MaterialStatus.objects.get_or_create(
                 material=self.materials[i],
                 stream=self.stream,
-                processed=(i % 2 == 0)
+                state=(1 if (i % 2 == 0) else 0)
             )[0]
             ms.save()
-
-    def test_mark_with_tags(self):
-        # check if the mark_with_tags method in the Collect class don't
-        # append a new tag into the stream.
-        self.assertTrue(self.stream.tags.empty())
-        self.collect.mark_with_tags(self.stream)
-        self.assertTrue(self.stream.tags.empty())
 
     def test_get_key(self):
         # check if the abstract class should raise an exception because these
@@ -70,24 +63,13 @@ class TestCollectors(TestCase):
             self.assertTrue(key in ["even", "uneven"])
             self.assertTrue(streams[key].empty())
 
-    def test_do(self):
+    def test_step(self):
         # check if all the material statuses of the stream are unprocessed.
-        self.assertTrue(
-            self.stream.materials.filter(processed=True).count(),
+        processed = MaterialStatus.statuses_name()[u'processed']
+        self.assertEquals(
+            self.stream.materials.filter(state=processed).count(),
             0)
         # check if collect materials into two differents streams: even and
         # uneven (with the fake get_key).
-        other = {"even": "uneven", "uneven": "even"}
-        result = self.other_collect.do(self.stream)
-        for fs in self.stream.materials.all():
-            self.assertTrue(fs.processed)
-            key = self.other_collect.get_key(fs)
-            stream = [s for s in result if s.tags.exist(key)][0]
-            other_stream = [s for s in result if s.tags.exist(other[key])][0]
-            self.assertNotEquals(stream, [])
-            self.assertIn(
-                fs.material,
-                [f.material for f in stream.materials.all()])
-            self.assertNotIn(
-                fs.material,
-                [f.material for f in other_stream.materials.all()])
+        for fs in self.stream.unprocessed():
+            self.assertFalse(fs.processed)

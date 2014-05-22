@@ -56,8 +56,8 @@ class TagManager(models.Model):
 class Stream(models.Model, object):
     class Meta(object):
         app_label = 'factopy'
-    tags = models.ForeignKey(TagManager, related_name='stream',
-                             default=TagManager.create_empty)
+    # tags = models.ForeignKey(TagManager, related_name='stream',
+    #                         default=TagManager.create_empty)
     unprocessed_count = models.IntegerField(default=0)
     observe = models.ManyToManyField('Process',
                                      related_name='observers',
@@ -87,30 +87,27 @@ class Stream(models.Model, object):
         return unicode(self).encode("utf-8")
 
     def __unicode__(self):
-        return u'[id: %s tags: %s unprocessed: %s] -> %s' % (
+        return u'[id: %s unprocessed: %s] -> %s' % (
             unicode(self.pk),
-            unicode(self.tags),
             unicode(self.unprocessed_count),
             unicode(self.feed))
 
     def save(self, *args, **kwargs):
         """ On save, update timestamps """
         now = datetime.utcnow().replace(tzinfo=pytz.UTC)
-        self.tags.save()
         if not self.pk:
             self.created = now
         self.modified = now
         return super(Stream, self).save(*args, **kwargs)
 
     def clone(self):
-        t = self.tags.clone()
-        t.save()
-        s = Stream(tags=t)
+        s = Stream()
         s.save()
         return s
 
     def unprocessed(self):
-        return self.materials.filter(processed=False)
+        return self.materials.filter(
+            state=MaterialStatus.statuses_name()[u'unprocessed'])
 
     def empty(self):
         pending = self.unprocessed()
@@ -133,6 +130,17 @@ class Material(PolymorphicModel, object):
             unicode(self.modified))
 
 
+MATERIAL_STATE = (
+    (0, u'unprocessed'),
+    (1, u'processing'),
+    (2, u'processed')
+)
+
+
+class InvalidStatus(RuntimeWarning):
+    pass
+
+
 class MaterialStatus(models.Model):
     class Meta(object):
         app_label = 'factopy'
@@ -140,7 +148,15 @@ class MaterialStatus(models.Model):
         unique_together = ("material", "stream")
     material = models.ForeignKey('Material', related_name='stream')
     stream = models.ForeignKey(Stream, related_name='materials')
-    processed = models.BooleanField()
+    state = models.IntegerField(choices=MATERIAL_STATE, default=0)
+
+    @classmethod
+    def statuses_number(klass):
+        return {x: y for x, y in MATERIAL_STATE}
+
+    @classmethod
+    def statuses_name(klass):
+        return {y: x for x, y in MATERIAL_STATE}
 
     def __str__(self):
         return unicode(self).encode("utf-8")
@@ -153,6 +169,27 @@ class MaterialStatus(models.Model):
                                                 stream=stream)
         cloned_material_status.save()
         return cloned_material_status
+
+    def status(self):
+        return self.__class__.statuses_number()[self.state]
+
+    def change_status(self, name):
+        try:
+            self.state = self.__class__.statuses_name()[name]
+            self.save()
+        except KeyError:
+            raise InvalidStatus
+
+    @property
+    def processed(self):
+        return self.status() == u'processed'
+
+    @processed.setter
+    def processed(self, value):
+        state = u'unprocessed'
+        if value:
+            state = u'processed'
+        self.change_status(state)
 
 
 class Process(PolymorphicModel, object):
@@ -172,4 +209,7 @@ class Process(PolymorphicModel, object):
             self.name)
 
     def mark_with_tags(self, stream):
+        pass
+
+    def step(self, material_status):
         pass

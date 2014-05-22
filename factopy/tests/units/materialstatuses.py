@@ -9,8 +9,6 @@ class TestMaterialStatuses(TestCase):
     def setUp(self):
         self.stream = Stream()
         self.stream.save()
-        self.stream.tags.append("to_be_cloned")
-        self.stream.tags.append("to_be_tested")
         self.second_stream = Stream()
         self.second_stream.save()
         self.material = Material()

@@ -17,10 +17,6 @@ class BackendModelAdmin(PolymorphicParentModelAdmin):
     )
 
 
-class TagManagerAdmin(admin.ModelAdmin):
-    list_display = ['tag_string']
-
-
 class StreamAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'unprocessed_count', 'created', 'modified']
 
@@ -56,7 +52,6 @@ class ProcessAdmin(PolymorphicParentModelAdmin):
 
 
 admin.site.register(BackendModel, BackendModelAdmin)
-admin.site.register(TagManager, TagManagerAdmin)
 admin.site.register(Stream, StreamAdmin)
 admin.site.register(Material, MaterialAdmin)
 admin.site.register(MaterialStatus, MaterialStatusAdmin)

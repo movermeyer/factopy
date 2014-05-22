@@ -22,14 +22,6 @@ class TestFilters(TestCase):
             )[0]
             ms.save()
 
-    def test_mark_with_tags(self):
-        # check if the mark_with_tags method in the Collect class don't
-        # append a new tag into the stream.
-        self.assertTrue(self.stream.tags.empty())
-        self.filter.mark_with_tags(self.stream)
-        self.other_filter.mark_with_tags(self.stream)
-        self.assertTrue(self.stream.tags.empty())
-
     def test_should_be_cloned(self):
         # check if return false by default.
         for ms in self.stream.materials.all():
@@ -38,8 +30,9 @@ class TestFilters(TestCase):
 
     def test_do(self):
         # check if all the material statuses of the stream are unprocessed.
+        processed = MaterialStatus.statuses_name()[u'processed']
         self.assertEquals(
-            self.stream.materials.filter(processed=True).count(),
+            self.stream.materials.filter(state=processed).count(),
             0)
         # check if it call to should_be_cloned for each material_status of the
         # stream.

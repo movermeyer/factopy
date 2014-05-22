@@ -19,22 +19,21 @@ class TestStreams(TestCase):
             ms = MaterialStatus.objects.get_or_create(
                 material=self.materials[i],
                 stream=self.stream,
-                processed=(i % 2 == 0)
+                state=(0 if (i % 2 == 0) else 2)
             )[0]
             ms.save()
 
     def test_serialization(self):
         # check if the __str__ method is defined to return the object pk and
-        # tags parameter.
-        result = u'[id: %s tags: %s unprocessed: %s] -> %s' % (
+        # parameter.
+        result = u'[id: %s unprocessed: %s] -> %s' % (
             unicode(self.stream.pk),
-            unicode(self.stream.tags),
             unicode(self.stream.unprocessed_count),
             unicode(self.stream.feed)
         )
         self.assertEquals(str(self.stream), str(result))
         # check if the __unicode__ method is defined to return the object pk
-        # and tags parameter.
+        # parameter.
         self.assertEquals(unicode(self.stream), result)
 
     def test_save(self):
@@ -50,13 +49,11 @@ class TestStreams(TestCase):
 
     def test_clone(self):
         # check if the clone method create a new stream.
-        self.stream.tags.append("to_be_cloned")
-        self.stream.tags.append("to_be_tested")
         clone = self.stream.clone()
         self.assertNotEquals(clone, self.stream)
-        # check if the cloned stream has all the tags
-        self.assertNotEquals(clone.tags, self.stream.tags)
-        self.assertEquals(clone.tags.list(), self.stream.tags.list())
+        # check if the cloned stream is different from the original
+        self.assertNotEquals(clone, self.stream)
+        # self.assertEquals(clone, self.stream)
         # check if the cloned stream is empty, and if the clone method avoid
         # clone the files.
         self.assertEquals(self.stream.materials.count(), 12)
@@ -82,7 +79,6 @@ class TestStreams(TestCase):
         # check if it create an empty stream.
         stream = Stream.create_empty()
         self.assertEquals(stream.__class__, Stream)
-        self.assertTrue(stream.tags.empty())
         self.assertEquals(stream.unprocessed_count, 0)
         self.assertEquals(stream.feed, None)
         self.assertEquals(Stream.objects.filter(id=stream.id).count(), 1)
