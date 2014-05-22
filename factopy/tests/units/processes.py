@@ -17,7 +17,7 @@ class TestProcesses(TestCase):
     def test_serialization(self):
         # check if the __str__ method is defined to return the class name with
         # the name parameter.
-        process = u'Collect [year.Mmonth]'
+        process = u'Filter [year.Mmonth]'
         other_process = u"Filter [Filter night's images]"
         self.assertEquals(str(self.process), str(process))
         self.assertEquals(str(self.other_process), str(other_process))

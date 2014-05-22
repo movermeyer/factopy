@@ -1,6 +1,5 @@
 from adapters import *
 from backendmodels import *
-from collectors import *
 from filters import *
 from importers import *
 from materials import *

@@ -95,7 +95,7 @@
         "pk": 3,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 15,
+            "polymorphic_ctype": 14,
             "description": "Select GOES 13 Channel 1 (visible channel).",
             "name": "G13C1"
         }
@@ -116,7 +116,7 @@
     },
     {
         "pk": 4,
-        "model": "factopy.collect",
+        "model": "factopy.filter",
         "fields": {}
     },
     {
@@ -130,14 +130,14 @@
     },
     {
         "pk": 5,
-        "model": "factopy.collect",
+        "model": "factopy.filter",
         "fields": {}
     },
     {
         "pk": 6,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 15,
+            "polymorphic_ctype": 14,
             "description": "Only pass the images with a solar elevation >= 10 degrees.",
             "name": "Filter night's images"
         }
@@ -158,7 +158,7 @@
     },
     {
         "pk": 7,
-        "model": "factopy.collect",
+        "model": "factopy.filter",
         "fields": {}
     },
     {
@@ -172,14 +172,14 @@
     },
     {
         "pk": 8,
-        "model": "factopy.collect",
+        "model": "factopy.filter",
         "fields": {}
     },
     {
         "pk": 1,
         "model": "factopy.backendmodel",
         "fields": {
-            "polymorphic_ctype": 17
+            "polymorphic_ctype": 16
         }
     },
     {
