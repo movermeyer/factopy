@@ -2,7 +2,7 @@ from django.contrib import admin
 from polymorphic.admin import PolymorphicParentModelAdmin, \
     PolymorphicChildModelAdmin, PolymorphicChildModelFilter
 from factopy.models import BackendModel, Node, Stream, \
-    MaterialStatus, Material, Process, Filter, Collect, Adapt
+    MaterialStatus, Material, Process, Filter, Adapt
 
 
 class BackendModelChildAdmin(PolymorphicChildModelAdmin):
@@ -46,7 +46,6 @@ class ProcessAdmin(PolymorphicParentModelAdmin):
     list_filter = (PolymorphicChildModelFilter,)
     child_models = (
         (Filter, ProcessChildAdmin),
-        (Collect, ProcessChildAdmin),
         (Adapt, ProcessChildAdmin),
     )
 
