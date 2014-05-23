@@ -1,29 +1,47 @@
 from django.db import models
 from core import Process
 import threading
+from datetime import datetime
+import pytz
 
 
 class Adapt(Process):
     class Meta(object):
         app_label = 'factopy'
 
-    def do(self, stream):
-        return stream
+    def step(self):
+        if self.should_adapt():
+            self.update()
+
+    def should_adapt(self):
+        return False
 
     def update(self):
-        raise Exception("Subclass responsability")
+        raise Exception(u"Subclass responsability")
 
 
-class Importer(Adapt):
+class Push(Adapt):
     class Meta(object):
             app_label = 'factopy'
     frequency = models.IntegerField(default=15*60)  # expressed in seconds
+    previous = models.DateTimeField(default=datetime.utcnow().
+                                    replace(tzinfo=pytz.UTC))
 
     @classmethod
     def setup_unloaded(klass):
-        importers = [i for i in klass.objects.all()
-                     if not hasattr(i, "thread")]
-        for i in importers:
+        pushers = [i for i in klass.objects.all()
+                   if not hasattr(i, "thread")]
+        for i in pushers:
             i.thread = threading.Timer(i.frequency, i.update)
             i.thread.start()
-        return importers
+        return pushers
+
+    def should_adapt(self):
+        now = datetime.utcnow().replace(tzinfo=pytz.UTC)
+        should_push = (now - self.previous) > self.frequency
+        if should_push:
+            self.frequency = now
+        return should_push
+
+    def update(self):
+        raise Exception(u"Subclass responsability")

@@ -18,3 +18,7 @@ class TestAdapters(TestCase):
         with self.assertRaises(Exception) as err:
             self.adapter.update()
         self.assertEquals(unicode(err.exception), u"Subclass responsability")
+
+    def test_should_adapt(self):
+        # by default an adapter should not adapt anything.
+        self.assertFalse(self.adapter.should_adapt())

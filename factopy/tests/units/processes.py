@@ -25,12 +25,3 @@ class TestProcesses(TestCase):
         # with the name parameter.
         self.assertEquals(unicode(self.process), process)
         self.assertEquals(unicode(self.other_process), other_process)
-
-    def test_mark_with_tags(self):
-        # check if the mark_with_tags method in the Process class don't
-        # append a new tag into the stream.
-        self.process.mark_with_tags(self.stream)
-        self.assertTrue(self.stream.empty())
-        self.other_process.mark_with_tags(self.stream)
-        self.last_process.mark_with_tags(self.stream)
-        self.assertTrue(self.stream.empty())

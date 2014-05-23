@@ -157,8 +157,5 @@ class Process(PolymorphicModel, object):
             self.__class__.__name__,
             self.name)
 
-    def mark_with_tags(self, stream):
-        pass
-
-    def step(self, material_status):
-        pass
+    def step(self):
+        raise Exception(u"Subclass responsability")
