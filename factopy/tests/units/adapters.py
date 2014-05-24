@@ -22,3 +22,13 @@ class TestAdapters(TestCase):
     def test_should_adapt(self):
         # by default an adapter should not adapt anything.
         self.assertFalse(self.adapter.should_adapt())
+
+    def test_step(self):
+        # by default dont should execute the update.
+        self.assertEquals(self.adapter.step(), None)
+        # when a subclass should_adapt, it execute the update and raise
+        # the exception.
+        self.adapter.should_adapt = lambda: True
+        with self.assertRaises(Exception) as err:
+            self.adapter.step()
+        self.assertEquals(unicode(err.exception), u"Subclass responsability")

@@ -42,6 +42,3 @@ class Push(Adapt):
         if should_push:
             self.frequency = now
         return should_push
-
-    def update(self):
-        raise Exception(u"Subclass responsability")
