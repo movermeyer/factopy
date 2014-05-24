@@ -20,9 +20,7 @@ class Stream(models.Model, object):
 
     @classmethod
     def requiring_work(klass):
-        q = klass.objects.extra(select={
-            'unprocessed_count': "unprocessed_count > '0'"
-        })
+        q = klass.objects.filter(unprocessed_count__gt=0)
         q = q.extra(order_by=['-unprocessed_count'])
         return q
 
@@ -61,6 +59,12 @@ class Stream(models.Model, object):
     def empty(self):
         pending = self.unprocessed()
         return len(pending) == 0
+
+    def update_unprocessed_count(self):
+        unprocessed = MaterialStatus.statuses_name()[u'unprocessed']
+        self.unprocessed_count = self.materials\
+            .filter(state=unprocessed).count()
+        self.save()
 
 
 class Material(PolymorphicModel, object):
@@ -116,6 +120,7 @@ class MaterialStatus(models.Model):
     def clone_for(self, stream):
         cloned_material_status = MaterialStatus(material=self.material,
                                                 stream=stream)
+        cloned_material_status.change_status(u"unprocessed")
         cloned_material_status.save()
         return cloned_material_status
 
@@ -125,6 +130,7 @@ class MaterialStatus(models.Model):
     def change_status(self, name):
         try:
             self.state = self.__class__.statuses_name()[name]
+            self.stream.update_unprocessed_count()
             self.save()
         except KeyError:
             raise InvalidStatus

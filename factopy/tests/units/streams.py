@@ -10,16 +10,19 @@ class TestStreams(TestCase):
 
     def setUp(self):
         self.begin = datetime.utcnow().replace(tzinfo=pytz.UTC)
-        self.stream = Stream()
+        self.stream = Stream(unprocessed_count=6)
         self.stream.save()
+        self.other_stream = Stream()
+        self.other_stream.save()
         self.end = datetime.utcnow().replace(tzinfo=pytz.UTC)
         self.materials = [Material() for i in range(1, 13)]
         for i in range(len(self.materials)):
             self.materials[i].save()
+            state = 0 if (i % 2 == 0) else 2
             ms = MaterialStatus.objects.get_or_create(
                 material=self.materials[i],
                 stream=self.stream,
-                state=(0 if (i % 2 == 0) else 2)
+                state=state
             )[0]
             ms.save()
 
@@ -82,3 +85,11 @@ class TestStreams(TestCase):
         self.assertEquals(stream.unprocessed_count, 0)
         self.assertEquals(stream.feed, None)
         self.assertEquals(Stream.objects.filter(id=stream.id).count(), 1)
+
+    def test_requiring_work(self):
+        # check if return all the streams with pending material statusese.
+        self.assertEquals(len(Stream.requiring_work()), 1)
+        self.assertEquals(Stream.requiring_work()[0], self.stream)
+        [ms.clone_for(self.other_stream) for ms in self.stream.materials.all()]
+        self.assertEquals(len(Stream.requiring_work()), 2)
+        self.assertEquals(Stream.requiring_work()[0], self.other_stream)

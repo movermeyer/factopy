@@ -25,3 +25,8 @@ class TestProcesses(TestCase):
         # with the name parameter.
         self.assertEquals(unicode(self.process), process)
         self.assertEquals(unicode(self.other_process), other_process)
+
+    def test_step(self):
+        with self.assertRaises(Exception) as e:
+            self.process.step()
+        self.assertEquals(unicode(e.exception), u'Subclass responsability')
