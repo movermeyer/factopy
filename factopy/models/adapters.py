@@ -28,8 +28,8 @@ class Push(Adapt):
                                     replace(tzinfo=pytz.UTC))
 
     @classmethod
-    def setup_unloaded(klass):
-        pushers = [i for i in klass.objects.all()
+    def setup_unloaded(cls):
+        pushers = [i for i in cls.objects.all()
                    if not hasattr(i, "thread")]
         for i in pushers:
             i.thread = threading.Timer(i.frequency, i.update)

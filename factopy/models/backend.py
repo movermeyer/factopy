@@ -29,11 +29,11 @@ class BackendModel(PolymorphicModel, th.Thread):
     state = models.IntegerField(choices=BACKEND_STATE, default=0)
 
     @classmethod
-    def statuses_number(klass):
+    def statuses_number(cls):
         return {x: y for x, y in BACKEND_STATE}
 
     @classmethod
-    def statuses_name(klass):
+    def statuses_name(cls):
         return {y: x for x, y in BACKEND_STATE}
 
     def __str__(self):

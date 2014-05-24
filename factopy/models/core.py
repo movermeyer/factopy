@@ -19,14 +19,14 @@ class Stream(models.Model, object):
         default=datetime.utcnow().replace(tzinfo=pytz.UTC))
 
     @classmethod
-    def requiring_work(klass):
-        q = klass.objects.filter(unprocessed_count__gt=0)
+    def requiring_work(cls):
+        q = cls.objects.filter(unprocessed_count__gt=0)
         q = q.extra(order_by=['-unprocessed_count'])
         return q
 
     @classmethod
-    def create_empty(klass):
-        s = klass()
+    def create_empty(cls):
+        s = cls()
         s.save()
         return s
 
@@ -104,11 +104,11 @@ class MaterialStatus(models.Model):
     state = models.IntegerField(choices=MATERIAL_STATE, default=0)
 
     @classmethod
-    def statuses_number(klass):
+    def statuses_number(cls):
         return {x: y for x, y in MATERIAL_STATE}
 
     @classmethod
-    def statuses_name(klass):
+    def statuses_name(cls):
         return {y: x for x, y in MATERIAL_STATE}
 
     def __str__(self):
