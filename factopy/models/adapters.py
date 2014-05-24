@@ -1,7 +1,7 @@
 from django.db import models
 from core import Process
 import threading
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 
 
@@ -38,7 +38,7 @@ class Push(Adapt):
 
     def should_adapt(self):
         now = datetime.utcnow().replace(tzinfo=pytz.UTC)
-        should_push = (now - self.previous) > self.frequency
+        should_push = (now - self.previous) > timedelta(seconds=self.frequency)
         if should_push:
-            self.frequency = now
+            self.previous = now
         return should_push

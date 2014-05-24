@@ -16,7 +16,3 @@ class Filter(Process):
             fs.processed = True
             fs.save()
         return resultant_stream
-
-    def mark_with_tags(self, stream):
-        # Don't used because these process is transparent in the name
-        pass
