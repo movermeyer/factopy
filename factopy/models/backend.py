@@ -14,15 +14,43 @@ BACKEND_STATE = (
 )
 
 
-class InvalidBackendModel(Exception):
-    pass
+class StoppableThread(th.Thread):
+
+    def __init__(self, model):
+        super(StoppableThread, self).__init__()
+        self._stop = th.Event()
+        self.model = model
+        self.opts = {
+            u'off': lambda: self._stop.set(),
+            u'running': lambda: self._stop.clear()}
+        self.sync_stop()
+
+    def start(self):
+        self.model.bootup()
+        self.model.change_status(u'running')
+        super(StoppableThread, self).start()
+
+    def stop(self):
+        self.model.bootdown()
+        self.model.change_status(u'off')
+        self._stop.set()
+
+    def sync_stop(self):
+        self.opts[self.model.status()]()
+
+    def stopped(self):
+        self.sync_stop()
+        return self._stop.is_set()
+
+    def run(self):
+        while not self.stopped():
+            try:
+                self.model.step()
+            except AssertionError:
+                self.stop()
 
 
-class NetworkInterrupt(Exception):
-    pass
-
-
-class BackendModel(PolymorphicModel, th.Thread):
+class BackendModel(PolymorphicModel):
     class Meta(object):
         app_label = 'factopy'
     objects = PolymorphicManager()
@@ -44,23 +72,6 @@ class BackendModel(PolymorphicModel, th.Thread):
             unicode(self.__class__.__name__),
             unicode(self.status()))
 
-    def init_stop(self):
-        if not hasattr(self, '_stop'):
-            self._stop = th.Event()
-
-    def stop(self):
-        self.change_status(u'off')
-        self._stop.set()
-
-    def sync_stop(self):
-        if self.status() == u'off':
-            self.stop()
-
-    def stopped(self):
-        self.init_stop()
-        self.sync_stop()
-        return self._stop.is_set()
-
     def status(self):
         self.state = self.__class__.objects.get(id=self.id).state
         return self.__class__.statuses_number()[self.state]
@@ -72,39 +83,28 @@ class BackendModel(PolymorphicModel, th.Thread):
         except KeyError:
             raise InvalidStatus
 
-    def start(self):
-        self.change_status(u'running')
-        super(BackendModel, self).start()
-
-    def run(self):
-        while not self.stopped():
-            try:
-                self.step()
-            except Exception, error:
-                raise InvalidBackendModel(error)
+    def step(self):
+        pass
 
     def bootup(self):
-        if self.status() == u'off':
-            self.start()
+        pass
 
     def bootdown(self):
-        if self.status() == u'running':
-            self.stop()
-            self.join()
+        pass
 
 
-import time
-# from django.db import transaction
+from django.db import connection
 
 
-# @transaction.commit_on_success
-def manager_job(args):
-    ss = Stream.requiring_work().count()
-    # transaction.set_dirty()
-    # if ss.count() > 0:
-    return u'%f.1->%s (%s)' % (time.clock(), args, unicode(ss))
-    # else:
-    #    return None
+def manager_job(stream_id):
+    from factopy.models import Stream
+    s, is_new = Stream.objects.get_or_create(id=stream_id)
+    if is_new:
+        raise Exception('FAIL!!')
+    return u'%i->%s (%s)' % (
+        stream_id,
+        unicode(s.unprocessed_count),
+        s.feed.name)
 
 
 class Node(BackendModel):
@@ -114,21 +114,17 @@ class Node(BackendModel):
     manager_amount = models.IntegerField(default=2)
 
     def bootup(self):
-        if self.status() == u'off':
-            self.ip = socket.gethostbyname(socket.gethostname())
+        self.ip = socket.gethostbyname(socket.gethostname())
 
-            def init_manager():
-                signal.signal(signal.SIGINT, signal.SIG_IGN)
-            self.managers = mp.Pool(self.manager_amount, init_manager)
-        super(Node, self).bootup()
+        def init_manager():
+            signal.signal(signal.SIGINT, signal.SIG_IGN)
+        self.managers = mp.Pool(self.manager_amount, init_manager)
 
     def bootdown(self):
         if hasattr(self, 'managers'):
-            try:
-                self.managers.close()
-            except KeyboardInterrupt:
-                self.managers.terminate()
-        super(Node, self).bootdown()
+            self.managers.close()
 
     def step(self):
-        print self.managers.map(manager_job, range(6))
+        ids = Stream.requiring_work().values_list('id', flat=True)
+        print "\n%s" % unicode(self.managers.map(manager_job, ids))
+        connection.close()

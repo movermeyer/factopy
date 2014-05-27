@@ -9,6 +9,9 @@ class TestBackendModels(TestCase):
     def setUp(self):
         self.model = BackendModel.objects.get(pk=1)
 
+    def tearDown(self):
+        self.model.change_status(u'off')
+
     def test_serialization(self):
         # check if the __str__ method is defined to return the class name with
         # the status.
