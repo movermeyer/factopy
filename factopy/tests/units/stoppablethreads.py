@@ -96,3 +96,13 @@ class TestStoppableThreads(TestCase):
         self.assertFalse(self.thread.stopped())
         defer(lambda: self.thread.run())
         self.assertTrue(self.count > 3)
+        # check if the main loop stop when the step raise an AssertionError.
+
+        def wrap():
+            raise AssertionError()
+        self.thread.model.step = wrap
+        self.thread._stop.clear()
+        self.model.change_status(u'running')
+        self.assertFalse(self.thread.stopped())
+        defer(lambda: self.thread.run())
+        self.assertTrue(self.thread.stopped())
