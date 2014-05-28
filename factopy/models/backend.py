@@ -5,6 +5,7 @@ import signal
 import threading as th
 import socket
 from factopy.models import InvalidStatus, Stream
+from django.db import connection
 
 
 BACKEND_STATE = (
@@ -84,16 +85,13 @@ class BackendModel(PolymorphicModel):
             raise InvalidStatus
 
     def step(self):
-        pass
+        raise Exception(u'Subclass responsability')
 
     def bootup(self):
         pass
 
     def bootdown(self):
         pass
-
-
-from django.db import connection
 
 
 def manager_job(stream_id):
@@ -119,10 +117,6 @@ class Node(BackendModel):
         def init_manager():
             signal.signal(signal.SIGINT, signal.SIG_IGN)
         self.managers = mp.Pool(self.manager_amount, init_manager)
-
-    def bootdown(self):
-        if hasattr(self, 'managers'):
-            self.managers.close()
 
     def step(self):
         ids = Stream.requiring_work().values_list('id', flat=True)

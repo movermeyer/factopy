@@ -1,5 +1,6 @@
 from adapters import *
 from backendmodels import *
+from nodes import *
 from stoppablethreads import *
 from filters import *
 from materials import *

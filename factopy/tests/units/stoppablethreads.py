@@ -2,6 +2,7 @@
 from factopy.models import BackendModel, StoppableThread
 from django.test import TestCase
 import threading as th
+from defer import defer
 
 
 class TestStoppableThreads(TestCase):
@@ -80,3 +81,18 @@ class TestStoppableThreads(TestCase):
         self.assertFalse(self.thread.stopped())
         self.model.change_status(u'off')
         self.assertTrue(self.thread.stopped())
+
+    def test_run(self):
+        # check if the run method contain the backend main loop.
+        self.count = 0
+
+        def wrap():
+            self.count = self.count + 1
+            if self.count > 3:
+                self.thread.stop()
+        self.thread.model.step = wrap
+        self.thread._stop.clear()
+        self.model.change_status(u'running')
+        self.assertFalse(self.thread.stopped())
+        defer(lambda: self.thread.run())
+        self.assertTrue(self.count > 3)

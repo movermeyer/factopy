@@ -12,3 +12,4 @@ django-sslify==0.2.2
 uWSGI==2.0.3
 ipython==2.0.0
 django-debug-toolbar==1.2
+defer==1.0.4
