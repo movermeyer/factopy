@@ -95,14 +95,15 @@ class BackendModel(PolymorphicModel):
 
 
 def manager_job(stream_id):
-    from factopy.models import Stream
-    s, is_new = Stream.objects.get_or_create(id=stream_id)
+    stream, is_new = Stream.objects.get_or_create(id=stream_id)
     if is_new:
-        raise Exception('FAIL!!')
+        raise Exception(u'Trying to process a recently created Stream object.')
+    process = stream.feed
+    process.step()
     return u'%i->%s (%s)' % (
         stream_id,
-        unicode(s.unprocessed_count),
-        s.feed.name)
+        unicode(stream.unprocessed_count),
+        stream.feed.name)
 
 
 class Node(BackendModel):
@@ -111,14 +112,18 @@ class Node(BackendModel):
     ip = models.TextField(default="", null=True)
     manager_amount = models.IntegerField(default=2)
 
+    def init_managers(self):
+
+        def init():
+            signal.signal(signal.SIGINT, signal.SIG_IGN)
+        self.managers = mp.Pool(self.manager_amount, init)
+
     def bootup(self):
         self.ip = socket.gethostbyname(socket.gethostname())
-
-        def init_manager():
-            signal.signal(signal.SIGINT, signal.SIG_IGN)
-        self.managers = mp.Pool(self.manager_amount, init_manager)
+        self.init_managers()
 
     def step(self):
         ids = Stream.requiring_work().values_list('id', flat=True)
-        print "\n%s" % unicode(self.managers.map(manager_job, ids))
+        # here the map function should not return any value.
+        self.managers.map(manager_job, ids)
         connection.close()

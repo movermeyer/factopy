@@ -10,7 +10,7 @@ class Command(BaseCommand, object):
 
     def __init__(self, *args, **options):
         super(Command, self).__init__(*args, **options)
-        self.node = Node.objects.all()[0]
+        self.node = Node.objects.get(pk=1)
         self.thread = StoppableThread(self.node)
 
     def handle(self, *args, **options):

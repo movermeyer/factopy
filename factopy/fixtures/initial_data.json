@@ -4,6 +4,7 @@
         "model": "factopy.stream",
         "fields": {
         	"feed": 1,
+            "unprocessed_count": 0,
             "observe": []
         }
     },
@@ -12,7 +13,8 @@
         "model": "factopy.stream",
         "fields": {
         	"feed": 2,
-            "observe": [6]
+            "unprocessed_count": 0,
+            "observe": [1]
         }
     },
     {
@@ -20,7 +22,8 @@
         "model": "factopy.stream",
         "fields": {
         	"feed": 3,
-            "observe": [1]
+            "unprocessed_count": 0,
+            "observe": [2]
         }
     },
     {
@@ -28,6 +31,7 @@
         "model": "factopy.stream",
         "fields": {
         	"feed": 4,
+            "unprocessed_count": 0,
             "observe": [3]
         }
     },
@@ -36,6 +40,7 @@
         "model": "factopy.stream",
         "fields": {
         	"feed": 5,
+            "unprocessed_count": 0,
             "observe": [4]
         }
     },
@@ -44,23 +49,98 @@
         "model": "factopy.stream",
         "fields": {
         	"feed": 6,
-            "observe": [5]
+            "unprocessed_count": 5,
+            "observe": [3]
         }
     },
     {
-        "pk": 7,
-        "model": "factopy.stream",
+        "pk": 1,
+        "model": "factopy.material",
         "fields": {
-        	"feed": 7,
-            "observe": []
+            "polymorphic_ctype": 9,
+            "created": "2014-06-01 10:10:01+00:00",
+            "modified": "2014-06-01 10:10:01+00:00"
         }
     },
     {
-        "pk": 8,
-        "model": "factopy.stream",
+        "pk": 2,
+        "model": "factopy.material",
         "fields": {
-        	"feed": 8,
-            "observe": []
+            "polymorphic_ctype": 9,
+            "created": "2014-06-01 10:10:02+00:00",
+            "modified": "2014-06-01 10:10:02+00:00"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "factopy.material",
+        "fields": {
+            "polymorphic_ctype": 9,
+            "created": "2014-06-01 10:10:03+00:00",
+            "modified": "2014-06-01 10:10:03+00:00"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "factopy.material",
+        "fields": {
+            "polymorphic_ctype": 9,
+            "created": "2014-06-01 10:10:04+00:00",
+            "modified": "2014-06-01 10:10:04+00:00"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "factopy.material",
+        "fields": {
+            "polymorphic_ctype": 9,
+            "created": "2014-06-01 10:10:05+00:00",
+            "modified": "2014-06-01 10:10:05+00:00"
+        }
+    }, 
+    {
+        "pk": 1,
+        "model": "factopy.materialstatus",
+        "fields": {
+            "material": 1,
+            "stream": 6,
+            "state": 0
+        }
+    },
+    {
+        "pk": 2,
+        "model": "factopy.materialstatus",
+        "fields": {
+            "material": 2,
+            "stream": 6,
+            "state": 0
+        }
+    },
+    {
+        "pk": 3,
+        "model": "factopy.materialstatus",
+        "fields": {
+            "material": 3,
+            "stream": 6,
+            "state": 0
+        }
+    },
+    {
+        "pk": 4,
+        "model": "factopy.materialstatus",
+        "fields": {
+            "material": 4,
+            "stream": 6,
+            "state": 0
+        }
+    },
+    {
+        "pk": 5,
+        "model": "factopy.materialstatus",
+        "fields": {
+            "material": 5,
+            "stream": 6,
+            "state": 0
         }
     },
     {
@@ -68,8 +148,8 @@
         "model": "factopy.process",
         "fields": {
             "polymorphic_ctype": 12,
-            "description": "Filter all images with solar elevation < 10 degrees.",
-            "name": "Filter nights and compact"
+            "description": "Fill a form request in the web.",
+            "name": "Fill requests"
         }
     },
     {
@@ -82,8 +162,8 @@
         "model": "factopy.process",
         "fields": {
             "polymorphic_ctype": 12,
-            "description": "Compile all in a NetCDF4 file.",
-            "name": "Save"
+            "description": "Verify the materials ready to be downloaded.",
+            "name": "Receive request response"
         }
     },
     {
@@ -95,14 +175,14 @@
         "pk": 3,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 14,
-            "description": "Select GOES 13 Channel 1 (visible channel).",
-            "name": "G13C1"
+            "polymorphic_ctype": 12,
+            "description": "Download the materials.",
+            "name": "Grow database"
         }
     },
     {
         "pk": 3,
-        "model": "factopy.filter",
+        "model": "factopy.adapt",
         "fields": {}
     },
     {
@@ -110,8 +190,8 @@
         "model": "factopy.process",
         "fields": {
             "polymorphic_ctype": 14,
-            "description": "Classify the files by year and by month.",
-            "name": "year.Mmonth"
+            "description": "Implement an abstract filter.",
+            "name": "Filter materials"
         }
     },
     {
@@ -123,55 +203,22 @@
         "pk": 5,
         "model": "factopy.process",
         "fields": {
-            "polymorphic_ctype": 14,
-            "description": "Aggregate images by channel number",
-            "name": "Channel classify"
-        }
-    },
-    {
-        "pk": 5,
-        "model": "factopy.filter",
-        "fields": {}
-    },
-    {
-        "pk": 6,
-        "model": "factopy.process",
-        "fields": {
-            "polymorphic_ctype": 14,
-            "description": "Only pass the images with a solar elevation >= 10 degrees.",
-            "name": "Filter night's images"
+            "polymorphic_ctype": 11,
+            "description": "Implement an abstract model.",
+            "name": "Execute model"
         }
     },
     {
         "pk": 6,
-        "model": "factopy.filter",
-        "fields": {}
-    },
-    {
-        "pk": 7,
         "model": "factopy.process",
         "fields": {
             "polymorphic_ctype": 14,
-            "description": "Classify the files by year.",
-            "name": "year"
+            "description": "Implement a secondary filter.",
+            "name": "Another filter"
         }
     },
     {
-        "pk": 7,
-        "model": "factopy.filter",
-        "fields": {}
-    },
-    {
-        "pk": 8,
-        "model": "factopy.process",
-        "fields": {
-            "polymorphic_ctype": 14,
-            "description": "Classify the files by year and by week.",
-            "name": "year.Wweek"
-        }
-    },
-    {
-        "pk": 8,
+        "pk": 6,
         "model": "factopy.filter",
         "fields": {}
     },

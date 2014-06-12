@@ -1,26 +1,17 @@
 # -*- coding: utf-8 -*-
-from factopy.models import Stream, Material, MaterialStatus, Filter
+from factopy.models import Filter
 from django.test import TestCase
-import aspects
 
 
 class TestFilters(TestCase):
     fixtures = ['initial_data.yaml', '*']
 
     def setUp(self):
-        self.filter = Filter.objects.create(name='abstract one')
-        self.other_filter = Filter.objects.create(name='abstract two')
+        self.filter = Filter.objects.get_or_create(name='Filter materials')[0]
+        self.other_filter = Filter.objects.get_or_create(
+            name='Another filter')[0]
         self.other_filter.should_be_cloned = lambda material_status: True
-        self.stream = Stream()
-        self.stream.save()
-        self.materials = [Material() for i in range(5)]
-        for i in range(len(self.materials)):
-            self.materials[i].save()
-            ms = MaterialStatus.objects.get_or_create(
-                material=self.materials[i],
-                stream=self.stream
-            )[0]
-            ms.save()
+        self.stream = self.other_filter.streams.all()[0]
 
     def test_should_be_cloned(self):
         # check if return false by default.
@@ -28,24 +19,19 @@ class TestFilters(TestCase):
             self.assertEquals(self.filter.should_be_cloned(ms), False)
             self.assertEquals(self.other_filter.should_be_cloned(ms), True)
 
-    def test_do(self):
-        # check if all the material statuses of the stream are unprocessed.
-        processed = MaterialStatus.statuses_name()[u'processed']
-        self.assertEquals(
-            self.stream.materials.filter(state=processed).count(),
-            0)
-        # check if it call to should_be_cloned for each material_status of the
-        # stream.
+    def test_step(self):
+        # check if it call to should_be_cloned for each unprocessed
+        # material_status of the streams.
         self.materials = []
+        self.old_method = self.other_filter.should_be_cloned
 
-        def filter_wrap(*args):
-            yield aspects.proceed(*args)
-            self.materials.append(args[1].material)
-            # force the cloning of all the materials
-            yield aspects.return_stop(True)
-        filters = [self.filter.should_be_cloned]
-        aspects.with_wrap(filter_wrap, *filters)
-        self.filter.do(self.stream)
+        def wrap(*args):
+            it_should = self.old_method(*args)
+            if it_should:
+                self.materials.append(args[0].material)
+            return it_should
+        self.other_filter.should_be_cloned = wrap
+        self.other_filter.step()
         self.assertTrue(len(self.materials) > 0)
         # check if the filtered materials are contained in the input stream.
         for ms in self.stream.materials.all():

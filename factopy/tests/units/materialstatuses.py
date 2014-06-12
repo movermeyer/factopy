@@ -41,12 +41,12 @@ class TestMaterialStatuses(TestCase):
                           [u'unprocessed', u'processing', u'processed'])
         self.assertEquals(MaterialStatus.statuses_name().values(), [0, 1, 2])
 
-    def test_clone(self):
+    def test_clone_for(self):
         # check if the clone method create a new file_status.
         clone = self.material_status.clone_for(self.second_stream)
         self.assertNotEquals(clone, self.material_status)
-        # check if the cloned file_status has the second_stream and the same
-        # file object.
+        # check if the cloned material_status has the second_stream
+        # and the same material object.
         self.assertEquals(self.material_status.stream, self.stream)
         self.assertEquals(clone.stream, self.second_stream)
         self.assertEquals(clone.material, self.material_status.material)
@@ -84,4 +84,3 @@ class TestMaterialStatuses(TestCase):
         self.assertTrue(self.material_status.processed)
         self.material_status.processed = False
         self.assertEquals(self.material_status.status(), u'unprocessed')
-

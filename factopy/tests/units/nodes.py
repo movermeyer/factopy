@@ -42,7 +42,7 @@ class TestNodes(TestCase):
 
         def wrap(managers, ids):
             self.flag = True
-            l = Stream.requiring_work().values_list('id')
+            l = Stream.requiring_work().values_list('id', flat=True)
             self.assertEquals(len(ids), len(l))
             for i in ids:
                 self.assertIn(i, l)

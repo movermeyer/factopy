@@ -100,9 +100,11 @@ class TestStoppableThreads(TestCase):
 
         def wrap():
             raise AssertionError()
+
         self.thread.model.step = wrap
         self.thread._stop.clear()
         self.model.change_status(u'running')
+        self.model.bootup()
         self.assertFalse(self.thread.stopped())
         defer(lambda: self.thread.run())
         self.assertTrue(self.thread.stopped())

@@ -10,21 +10,15 @@ class TestStreams(TestCase):
 
     def setUp(self):
         self.begin = datetime.utcnow().replace(tzinfo=pytz.UTC)
-        self.stream = Stream(unprocessed_count=6)
-        self.stream.save()
+        self.stream = Stream.objects.get_or_create(id=6)[0]
         self.other_stream = Stream()
         self.other_stream.save()
         self.end = datetime.utcnow().replace(tzinfo=pytz.UTC)
-        self.materials = [Material() for i in range(1, 13)]
+        self.materials = self.stream.materials.all()[:]
         for i in range(len(self.materials)):
-            self.materials[i].save()
             state = 0 if (i % 2 == 0) else 2
-            ms = MaterialStatus.objects.get_or_create(
-                material=self.materials[i],
-                stream=self.stream,
-                state=state
-            )[0]
-            ms.save()
+            self.materials[i].state = state
+            self.materials[i].save()
 
     def test_serialization(self):
         # check if the __str__ method is defined to return the object pk and
@@ -42,13 +36,13 @@ class TestStreams(TestCase):
     def test_save(self):
         # check if hte instance was created between the begining and the ending
         # of the setup.
-        self.assertTrue(self.begin <= self.stream.created <= self.end)
+        self.assertTrue(self.begin <= self.other_stream.created <= self.end)
         # check if the created and modified datetime are equals
-        self.assertEquals(self.stream.created, self.stream.modified)
+        self.assertEquals(self.other_stream.created, self.other_stream.modified)
         # check if the modified datetime change when the objects is saved
         # again.
-        self.stream.save()
-        self.assertTrue(self.stream.modified > self.stream.created)
+        self.other_stream.save()
+        self.assertTrue(self.other_stream.modified > self.other_stream.created)
 
     def test_clone(self):
         # check if the clone method create a new stream.
@@ -59,7 +53,7 @@ class TestStreams(TestCase):
         # self.assertEquals(clone, self.stream)
         # check if the cloned stream is empty, and if the clone method avoid
         # clone the files.
-        self.assertEquals(self.stream.materials.count(), 12)
+        self.assertEquals(self.stream.materials.count(), 5)
         self.assertEquals(clone.materials.count(), 0)
 
     def test_unprocessed(self):
@@ -92,4 +86,4 @@ class TestStreams(TestCase):
         self.assertEquals(Stream.requiring_work()[0], self.stream)
         [ms.clone_for(self.other_stream) for ms in self.stream.materials.all()]
         self.assertEquals(len(Stream.requiring_work()), 2)
-        self.assertEquals(Stream.requiring_work()[0], self.other_stream)
+        self.assertEquals(Stream.requiring_work()[0], self.stream)

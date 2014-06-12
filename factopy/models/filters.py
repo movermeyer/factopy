@@ -8,11 +8,10 @@ class Filter(Process):
     def should_be_cloned(self, material_status):
         return False
 
-    def do(self, stream):
-        resultant_stream = stream.clone()
-        for fs in stream.materials.all():
-            if self.should_be_cloned(fs):
-                fs.clone_for(resultant_stream)
-            fs.processed = True
-            fs.save()
-        return resultant_stream
+    def step(self):
+        for stream in self.streams.all():
+            for material_status in stream.unprocessed():
+                material_status.change_status(u'processing')
+                if self.should_be_cloned(material_status):
+                    self.notify(material_status.material)
+                material_status.change_status(u'processed')

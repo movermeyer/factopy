@@ -82,6 +82,13 @@ class Material(PolymorphicModel, object):
             unicode(self.created),
             unicode(self.modified))
 
+    def inject_into(self, stream):
+        material_status = MaterialStatus(material=self,
+                                         stream=stream)
+        material_status.change_status(u"unprocessed")
+        material_status.save()
+        return material_status
+
 
 MATERIAL_STATE = (
     (0, u'unprocessed'),
@@ -118,11 +125,7 @@ class MaterialStatus(models.Model):
         return u'%s -> %s' % (unicode(self.stream), unicode(self.material))
 
     def clone_for(self, stream):
-        cloned_material_status = MaterialStatus(material=self.material,
-                                                stream=stream)
-        cloned_material_status.change_status(u"unprocessed")
-        cloned_material_status.save()
-        return cloned_material_status
+        return self.material.inject_into(stream)
 
     def status(self):
         return self.__class__.statuses_number()[self.state]
@@ -165,3 +168,7 @@ class Process(PolymorphicModel, object):
 
     def step(self):
         raise Exception(u"Subclass responsability")
+
+    def notify(self, material):
+        for observer in self.observers.all():
+            material.inject_into(observer)

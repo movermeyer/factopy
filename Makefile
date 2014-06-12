@@ -134,11 +134,7 @@ postgres: $(LIBPOSTGRES) pg-start
 	@ echo "[ setting up   ] postgres database"
 	@ cd factopy_configuration && cp -f database.postgres.py database.py
 
-aspects.py:
-	$(call get,python-aspects-1.3,python-aspects-1.3.tar.gz,http://www.cs.tut.fi/~ask/aspects)
-	@ cp python-aspects-1.3/aspects.py aspects.py
-
-libs-and-headers: $(PYTHONPATH) aspects.py
+libs-and-headers: $(PYTHONPATH)
 	@ $(update_shared_libs)
 
 bin/activate: requirements.txt
@@ -202,7 +198,7 @@ shell:
 
 clean: pg-stop
 	@ echo "[ cleaning     ] remove deployment generated files that doesn't exists in the git repository"
-	@ sudo rm -rf sqlite* postgresql* python-aspects* virtualenv* bin/ lib/ lib64 include/ build/ share Python-* .Python setuptools-*.tar.gz get-pip.py tracking.log factopy.sqlite3 aspects.py subversion
+	@ sudo rm -rf sqlite* postgresql* virtualenv* bin/ lib/ lib64 include/ build/ share Python-* .Python setuptools-*.tar.gz get-pip.py tracking.log factopy.sqlite3 subversion
 
 hardclean: clean
 	@ echo "[ cleaning     ] remove compiled libraries and the database engine"
