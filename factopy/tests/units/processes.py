@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from factopy.models import Stream, Process
+from factopy.models import Process, Material
 from django.test import TestCase
 
 
@@ -9,10 +9,7 @@ class TestProcesses(TestCase):
     def setUp(self):
         self.process = Process.objects.get(name='Execute model')
         self.other_process = Process.objects.get(pk=4)
-        self.last_process = Process(
-            name='Testing',
-            description='This is a fake process only for testing.')
-        self.stream = Stream()
+        self.observed_process = Process.objects.get(name='Grow database')
 
     def test_serialization(self):
         # check if the __str__ method is defined to return the class name with
@@ -27,6 +24,18 @@ class TestProcesses(TestCase):
         self.assertEquals(unicode(self.other_process), other_process)
 
     def test_step(self):
-        with self.assertRaises(Exception) as e:
+        # check if the abstract clas rise the Subclass responsability
+        # exception.
+        with self.assertRaisesRegexp(Exception, u'Subclass responsability'):
             self.process.step()
-        self.assertEquals(unicode(e.exception), u'Subclass responsability')
+
+    def test_notify(self):
+        # check that the observers not contains the material.
+        material = Material.objects.get(pk=1)
+        materials = [ms.material for s in self.observed_process.observers.all()
+                     for ms in s.materials.all()]
+        self.assertNotIn(material, materials)
+        # check if notify send to all the observers the material.
+        self.observed_process.notify(material)
+        for s in self.observed_process.observers.all():
+            self.assertIn(material, [ms.material for ms in s.materials.all()])
