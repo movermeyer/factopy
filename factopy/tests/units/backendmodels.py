@@ -47,7 +47,6 @@ class TestBackendModels(TestCase):
     def test_step(self):
         # check if the abstract model raise an exception.
         self.model.bootup()
-        with self.assertRaises(Exception) as e:
+        with self.assertRaisesRegexp(Exception, u'Subclass responsability'):
             self.model.step()
-        self.assertEquals(unicode(e.exception), u'Subclass responsability')
         self.model.bootdown()

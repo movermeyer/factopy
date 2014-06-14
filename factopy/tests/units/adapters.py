@@ -15,9 +15,8 @@ class TestAdapters(TestCase):
     def test_update(self):
         # check if the update method raise a "Subclass responsability"
         # exception  because the subclass should implement the method update.
-        with self.assertRaises(Exception) as err:
+        with self.assertRaisesRegexp(Exception, u'Subclass responsability'):
             self.adapter.update()
-        self.assertEquals(unicode(err.exception), u"Subclass responsability")
 
     def test_should_adapt(self):
         # by default an adapter should not adapt anything.
@@ -29,6 +28,5 @@ class TestAdapters(TestCase):
         # when a subclass should_adapt, it execute the update and raise
         # the exception.
         self.adapter.should_adapt = lambda: True
-        with self.assertRaises(Exception) as err:
+        with self.assertRaisesRegexp(Exception, u'Subclass responsability'):
             self.adapter.step()
-        self.assertEquals(unicode(err.exception), u"Subclass responsability")
