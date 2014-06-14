@@ -60,23 +60,6 @@ class MaterialStatusResource(ModelResource):
     material = fields.ForeignKey(MaterialResource, 'material', full=True)
 
 
-class StreamResource(ModelResource):
-    class Meta(object):
-        queryset = Stream.objects.all()
-        resource_name = 'stream'
-        filtering = {
-            'created': ['exact', 'lt', 'lte', 'gte', 'gt'],
-            'modified': ['exact', 'lt', 'lte', 'gte', 'gt'],
-        }
-    materials = fields.ToManyField(MaterialStatusResource, 'materials',
-                                   full=True)
-    authentication = SessionAuthentication()
-
-    def dehydrate(self, bundle):
-        bundle.data['tags'] = bundle.obj.tags.list()
-        return bundle
-
-
 class ProcessResource(PolymorphicModelResource):
     class Meta(object):
         queryset = Process.objects.all()
@@ -97,3 +80,19 @@ class ProcessResource(PolymorphicModelResource):
             self.extend_key(bundle.data, self.get_class_name(bundle),
                             {'processes': subprocesses})
         return bundle
+
+
+class StreamResource(ModelResource):
+    class Meta(object):
+        queryset = Stream.objects.all()
+        resource_name = 'stream'
+        filtering = {
+            'created': ['exact', 'lt', 'lte', 'gte', 'gt'],
+            'modified': ['exact', 'lt', 'lte', 'gte', 'gt'],
+        }
+    materials = fields.ToManyField(MaterialStatusResource, 'materials',
+                                   full=True)
+    feed = fields.ForeignKey(ProcessResource, 'feed',
+                             full=True)
+    observe = fields.ToManyField(ProcessResource, 'observe', full=True)
+    # authentication = SessionAuthentication()
