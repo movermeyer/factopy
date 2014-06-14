@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from factopy.models import Stream, Material, MaterialStatus
+from factopy.models import Stream
 from django.test import TestCase
 from datetime import datetime
 import pytz
@@ -10,7 +10,7 @@ class TestStreams(TestCase):
 
     def setUp(self):
         self.begin = datetime.utcnow().replace(tzinfo=pytz.UTC)
-        self.stream = Stream.objects.get_or_create(id=6)[0]
+        self.stream = Stream.objects.get_or_create(id=7)[0]
         self.other_stream = Stream()
         self.other_stream.save()
         self.end = datetime.utcnow().replace(tzinfo=pytz.UTC)
@@ -38,7 +38,8 @@ class TestStreams(TestCase):
         # of the setup.
         self.assertTrue(self.begin <= self.other_stream.created <= self.end)
         # check if the created and modified datetime are equals
-        self.assertEquals(self.other_stream.created, self.other_stream.modified)
+        self.assertEquals(self.other_stream.created,
+                          self.other_stream.modified)
         # check if the modified datetime change when the objects is saved
         # again.
         self.other_stream.save()

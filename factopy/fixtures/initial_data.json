@@ -4,7 +4,6 @@
         "model": "factopy.stream",
         "fields": {
         	"feed": 1,
-            "unprocessed_count": 0,
             "observe": []
         }
     },
@@ -49,8 +48,17 @@
         "model": "factopy.stream",
         "fields": {
         	"feed": 6,
-            "unprocessed_count": 5,
+            "unprocessed_count": 0,
             "observe": [3]
+        }
+    },
+    {
+        "pk": 7,
+        "model": "factopy.stream",
+        "fields": {
+        	"feed": 7,
+            "unprocessed_count": 5,
+            "observe": [6]
         }
     },
     {
@@ -103,7 +111,7 @@
         "model": "factopy.materialstatus",
         "fields": {
             "material": 1,
-            "stream": 6,
+            "stream": 7,
             "state": 0
         }
     },
@@ -112,7 +120,7 @@
         "model": "factopy.materialstatus",
         "fields": {
             "material": 2,
-            "stream": 6,
+            "stream": 7,
             "state": 0
         }
     },
@@ -121,7 +129,7 @@
         "model": "factopy.materialstatus",
         "fields": {
             "material": 3,
-            "stream": 6,
+            "stream": 7,
             "state": 0
         }
     },
@@ -130,7 +138,7 @@
         "model": "factopy.materialstatus",
         "fields": {
             "material": 4,
-            "stream": 6,
+            "stream": 7,
             "state": 0
         }
     },
@@ -139,7 +147,7 @@
         "model": "factopy.materialstatus",
         "fields": {
             "material": 5,
-            "stream": 6,
+            "stream": 7,
             "state": 0
         }
     },
@@ -212,13 +220,22 @@
         "pk": 6,
         "model": "factopy.process",
         "fields": {
+            "polymorphic_ctype": 11,
+            "description": "Implement an abstract process.",
+            "name": "Abstract process"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "factopy.process",
+        "fields": {
             "polymorphic_ctype": 14,
             "description": "Implement a secondary filter.",
             "name": "Another filter"
         }
     },
     {
-        "pk": 6,
+        "pk": 7,
         "model": "factopy.filter",
         "fields": {}
     },
