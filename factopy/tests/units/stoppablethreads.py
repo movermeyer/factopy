@@ -3,6 +3,7 @@ from factopy.models import BackendModel, StoppableThread
 from django.test import TestCase
 import threading as th
 from defer import defer
+import time
 
 
 class TestStoppableThreads(TestCase):
@@ -43,6 +44,8 @@ class TestStoppableThreads(TestCase):
         # check if status, threading_count and if is_alive change when
         # stop the thread.
         self.assertEquals(self.model.status(), u'running')
+        while not self.thread.is_alive():
+            time.sleep(1)
         self.assertTrue(self.thread.is_alive())
         old_count = th.active_count()
         self.thread.stop()
