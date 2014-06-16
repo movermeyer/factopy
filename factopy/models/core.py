@@ -20,15 +20,14 @@ class Stream(models.Model, object):
 
     @classmethod
     def requiring_work(cls):
-        q = cls.objects.filter(unprocessed_count__gt=0)
-        q = q.extra(order_by=['-unprocessed_count'])
-        return q
+        return (cls.objects.filter(unprocessed_count__gt=0).
+                extra(order_by=['-unprocessed_count']))
 
     @classmethod
     def create_empty(cls):
-        s = cls()
-        s.save()
-        return s
+        stream = cls()
+        stream.save()
+        return stream
 
     def __str__(self):
         return unicode(self).encode("utf-8")
