@@ -1,4 +1,4 @@
-from core import Process
+from factopy.models.core import Process
 
 
 class Filter(Process):

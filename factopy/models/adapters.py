@@ -1,5 +1,5 @@
 from django.db import models
-from core import Process
+from factopy.models.core import Process
 import threading
 from datetime import datetime, timedelta
 import pytz
