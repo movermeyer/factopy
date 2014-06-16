@@ -22,8 +22,8 @@ class StoppableThread(th.Thread):
         self._stop = th.Event()
         self.model = model
         self.opts = {
-            u'off': lambda: self._stop.set(),
-            u'running': lambda: self._stop.clear()}
+            u'off': self._stop.set,
+            u'running': self._stop.clear}
         self.sync_stop()
 
     def start(self):
@@ -113,10 +113,8 @@ class Node(BackendModel):
     manager_amount = models.IntegerField(default=2)
 
     def init_managers(self):
-
-        def init():
-            signal.signal(signal.SIGINT, signal.SIG_IGN)
-        self.managers = mp.Pool(self.manager_amount, init)
+        self.managers = mp.Pool(self.manager_amount, lambda: signal.signal(
+                                signal.SIGINT, signal.SIG_IGN))
 
     def bootup(self):
         self.ip = socket.gethostbyname(socket.gethostname())

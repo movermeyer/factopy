@@ -47,9 +47,9 @@ class Stream(models.Model, object):
         return super(Stream, self).save(*args, **kwargs)
 
     def clone(self):
-        s = Stream()
-        s.save()
-        return s
+        stream = self.__class__()
+        stream.save()
+        return stream
 
     def unprocessed(self):
         return self.materials.filter(
