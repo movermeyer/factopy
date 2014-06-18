@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block csslibs %}
+  <link rel="stylesheet" href="/static/dom.css">
+{% endblock %}
+
+{% block jslibs %}
+{% endblock %}
+
+{% block content %}
+  <div id="canvas"></div>
+  <script src="/static/jquery-2.1.1.min.js"></script>
+  <script src="/static/raphael-min.js"></script>
+  <script src="/static/graph.js"></script>
+  <script src="/static/graffle.js"></script>
+  <script src="/static/dom.js"></script>
+{% endblock %}

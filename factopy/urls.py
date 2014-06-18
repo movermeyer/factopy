@@ -12,5 +12,5 @@ api_v1.register(ProcessResource())
 
 urlpatterns = patterns('',
                        url(r'^api/', include(api_v1.urls)),
-                       url(r'^program/$', 'factopy.views.index'),
-)
+                       url(r'^$', 'factopy.views.index'),
+                       )
