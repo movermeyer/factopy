@@ -90,6 +90,10 @@ endif
 unattended:
 	@ (sudo ls 2>&1) >> tracking.log
 
+ubuntu:
+	@ (sudo apt-get -y install zlibc curl libssl0.9.8 libbz2-dev libxslt*-dev libxml*-dev 2>&1) >> tracking.log
+	@ echo "[ assume       ] ubuntu distribution"
+
 Python$(PYLARGESUFIX_VER):
 	$(call get,Python$(PYLARGESUFIX_VER),Python$(PYLARGESUFIX_VER).tgz,https://www.python.org/ftp/python/$(PYLARGEVERSION))
 	$(call compile,Python$(PYLARGESUFIX_VER),$(PYTHONLIBS),--prefix=$(PYPREFIX_PATH) --with-threads --enable-shared,altinstall)
