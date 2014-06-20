@@ -18,6 +18,10 @@ But, if you want use **postgresql** instead of sqlite3, you should execute the n
 
 All the testing are made in **python2.7**. If you haven't installed **python2.7** it is automatically installed with the previous command.
 
+As an exception, for **Ubuntu Desktop** (or Ubuntu in general) you can use the command:
+
+    $ PYVERSION=2.7 make ubuntu postgres deploy
+
 Last, you should configure a superuser access to the **frontend**. To do so, you should execute the next command and then fill the password field.
 
 	$ make defaultsuperuser
