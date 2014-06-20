@@ -37,3 +37,5 @@ Testing
 To test all the project you should use the command:
 
 	$ make test
+
+If you want to help us or report an issue use the [GitHub issue tracker](https://github.com/ecolell/factopy/issues).
