@@ -20,7 +20,7 @@ except ImportError:
 
 setup(
     name='factopy',
-    version='0.0.2',
+    version='0.0.3',
     author=u'Eloy Adonis Colell',
     author_email='eloy.colell@gmail.com',
     packages=find_packages(),
