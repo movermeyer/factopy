@@ -4,7 +4,7 @@ var width = 400;
 
 /* only do all this when document has finished loading (needed for RaphaelJS */
 $(function() {
-	$.get('/factopy/api/v1/stream/?format=json', 'json', function(data){
+	$.get('/factopy/api/v1/stream/?format=json', function(data){
 	    var g = new Graph();
 		streams = data.objects;
 		targets = {};
