@@ -138,10 +138,11 @@ postgres: $(LIBPOSTGRES) pg-start
 	@ echo "[ setting up   ] postgres database"
 	@ cd factopy_configuration && cp -f database.postgres.py database.py
 
-libs-and-headers: $(PYTHONPATH)
+libs-and-headers:
+	# $(PYTHONPATH)
 	@ $(update_shared_libs)
 
-bin/activate: requirements.txt
+bin/activate: requirements.txt requirements.development.txt
 	@ echo "[ using        ] $(PYTHONPATH)"
 	@ echo "[ installing   ] $(VIRTUALENV)"
 	@ (sudo $(FIRST_EASYINSTALL) virtualenv 2>&1) >> tracking.log
@@ -151,6 +152,7 @@ bin/activate: requirements.txt
 	@ ($(SOURCE_ACTIVATE) $(EASYINSTALL) pip 2>&1) >> tracking.log
 	@ echo "[ installing   ] $(PIP) requirements"
 	@ PATH="$(POSTGRES_PATH):$(PATH)"; $(SOURCE_ACTIVATE) $(PIP) install --default-timeout=100 -r requirements.txt 2>&1 | grep Downloading
+	@ PATH="$(POSTGRES_PATH):$(PATH)"; $(SOURCE_ACTIVATE) $(PIP) install --default-timeout=100 -r requirements.development.txt 2>&1 | grep Downloading
 	@ touch bin/activate
 
 postgres-requirements:
@@ -162,7 +164,7 @@ postgres-requirements:
 
 db-migrate: $(DATABASE_REQUIREMENTS)
 	@ echo "[ migrating    ] setting up the database structure"	
-	@ ($(SOURCE_ACTIVATE) $(PYTHON) manage.py syncdb --noinput 2>&1) >> ../tracking.log
+	@ ($(SOURCE_ACTIVATE) $(PYTHON) manage.py syncdb --noinput 2>&1) # >> ../tracking.log
 
 deploy: libs-and-headers bin/activate db-migrate
 	@ echo "[ deployed     ] the system was completly deployed"

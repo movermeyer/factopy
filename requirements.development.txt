@@ -1,0 +1,4 @@
+ipython==2.0.0
+vim-debug==1.5.4
+ipdb==0.8
+isort==3.9.0

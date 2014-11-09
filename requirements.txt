@@ -1,7 +1,6 @@
 pyandoc==0.0.1
 Django==1.5
 PyYAML==3.10
-numpy==1.8.0
 pytz==2012j
 django-polymorphic==0.5.3
 defusedxml==0.4.1
@@ -10,6 +9,5 @@ django-tastypie==0.11.0
 coveralls==0.3
 django-sslify==0.2.2
 uWSGI==2.0.3
-ipython==2.0.0
 django-debug-toolbar==1.2
 defer==1.0.4
