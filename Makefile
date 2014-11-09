@@ -138,8 +138,7 @@ postgres: $(LIBPOSTGRES) pg-start
 	@ echo "[ setting up   ] postgres database"
 	@ cd factopy_configuration && cp -f database.postgres.py database.py
 
-libs-and-headers:
-	# $(PYTHONPATH)
+libs-and-headers: $(PYTHONPATH)
 	@ $(update_shared_libs)
 
 bin/activate: requirements.txt requirements.development.txt
