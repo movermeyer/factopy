@@ -3,6 +3,7 @@ factopy
 
 [![GNU/AGPL License](http://www.gnu.org/graphics/agplv3-88x31.png)](https://github.com/gersolar/factopy/blob/master/GNU-AGPL-3.0.txt) [![Build Status](https://travis-ci.org/gersolar/factopy.png?branch=master)](https://travis-ci.org/gersolar/factopy) [![Coverage Status](https://coveralls.io/repos/gersolar/factopy/badge.png)](https://coveralls.io/r/gersolar/factopy) [![Code Health](https://landscape.io/github/gersolar/factopy/master/landscape.png)](https://landscape.io/github/gersolar/factopy/master) [![django packages badge](https://pypip.in/d/factopy/badge.png)](https://www.djangopackages.com/packages/p/factopy/)
 [![Supported Python versions](https://pypip.in/py_versions/factopy/badge.svg)](https://pypi.python.org/pypi/factopy/) [![Stories in Ready](https://badge.waffle.io/gersolar/factopy.png?label=ready&title=Ready)](https://waffle.io/gersolar/factopy)
+
 **factopy** is a python framework and provides abstract classes for a high performance computing cluster based in a pipe and filter architecture.
 
 Requirements

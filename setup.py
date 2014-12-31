@@ -3,8 +3,11 @@
 from setuptools import setup, find_packages
 import os
 import subprocess
-from pip.req import parse_requirements
 from setuptools.command import easy_install
+
+def parse_requirements(filename):
+    return list(filter(lambda line: (line.strip())[0] != '#',
+                       [line.strip() for line in open(filename).readlines()]))
 
 
 def calculate_version():
@@ -24,7 +27,7 @@ def calculate_version():
     return version_git
 
 
-reqs = [str(ir.req) for ir in parse_requirements('requirements.txt')]
+requirements = parse_requirements('requirements.txt')
 version_git = calculate_version()
 
 
@@ -59,5 +62,5 @@ setup(
     long_description=get_long_description(),
     zip_safe=False,
     include_package_data=True,
-    install_requires=reqs,
+    install_requires=requirements,
 )
