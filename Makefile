@@ -45,7 +45,8 @@ shell:
 	@ echo "[ shell        ] the system was loaded into an ipython shell"
 
 test-coverage-travis-ci:
-	@ $(SOURCE_ACTIVATE) coverage run --source='factopy/' tests/__main__.py
+	#@ $(SOURCE_ACTIVATE) coverage run --source='factopy/' factopy/tests/__main__.py
+	@ $(SOURCE_ACTIVATE) coverage run --source='factopy/models/' manage.py test factopy
 
 test-coveralls:
 	@ $(SOURCE_ACTIVATE) coveralls
